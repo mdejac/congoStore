@@ -117,31 +117,31 @@ function App() {
       </div>
 
       <div>
-      <h1>Single Product Axios Call</h1>
-      {Object.keys(productOne).length > 0 ? (
-        <div>
-          <p>ID: {productOne.id}</p>
-          <p>Name: {productOne.name}</p>
-          <p>Category: {productOne.category}</p>
-          <p>Description: {productOne.description}</p>
-          <p>Posted By: {productOne.creator.first_name} {productOne.creator.last_name}</p>
-          <p>Quantity: {productOne.quantity}</p>
-          <p>Price: {productOne.price}</p>
-          <p>Reviews:</p>
-          <ul>
-            {productOne.reviews.map((review, index) => (
-              <li key={index}>
-                <p>Content: {review.content}</p>
-                <p>Rating: {review.rating}</p>
-                <p>Posted By: {review.creator.first_name}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-        ) : (
-          <p>Loading...</p>
-      )}
-</div>
+        <h1>Single Product Axios Call</h1>
+        {Object.keys(productOne).length > 0 ? (
+          <div>
+            <p>ID: {productOne.id}</p>
+            <p>Name: {productOne.name}</p>
+            <p>Category: {productOne.category}</p>
+            <p>Description: {productOne.description}</p>
+            <p>Posted By: {productOne.creator.first_name} {productOne.creator.last_name}</p>
+            <p>Quantity: {productOne.quantity}</p>
+            <p>Price: {productOne.price}</p>
+            <p>Reviews:</p>
+            <ul>
+              {productOne.reviews.map((review, index) => (
+                <li key={index}>
+                  <p>Content: {review.content}</p>
+                  <p>Rating: {review.rating}</p>
+                  <p>Posted By: {review.creator.first_name}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+          ) : (
+            <p>Loading...</p>
+        )}
+      </div>
 
       <div>
         <h1>All Products by Category *furinture filter* Axios Call</h1>
