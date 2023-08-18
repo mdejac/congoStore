@@ -49,6 +49,9 @@ class Review:
             is_valid = False
         return is_valid
     
+
+    # API Specific Methods
+
     @staticmethod
     def validate_review_creation_data_api(data, product_id):
         is_valid = True
