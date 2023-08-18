@@ -43,17 +43,19 @@ def all_user_products(user_id):
 @app.route('/api/products/delete/<int:id>')
 def delete_product_api(id):
     product=Product.get_product_by_id(id)
-    if session['user_id'] == product.creator.id:
-        product.delete_product(id)
-        return jsonify(message="Product deleted successfully")
-    return jsonify(message="Unauthorized to delete this product"), 403
+    # if user_id is sent via post request on delete can be added back in 
+    # if data['user_id'] == product.creator.id:
+    product.delete_product(id)
+    return jsonify(message="Product deleted successfully")
+    # return jsonify(message="Unauthorized to delete this product"), 403
 
 @app.route('/api/products/edit/<int:id>')
 def edit_product_api(id):
     product=Product.get_product_by_id(id)
-    if session['user_id'] == product.creator.id:
-        return Product.serialize_product(product)
-    return jsonify(message="Unauthorized to edit this product"), 403
+    # if user_id is sent via post request on view can be added back in  
+    # if data['user_id'] == product.creator.id:
+    return Product.serialize_product(product)
+    # return jsonify(message="Unauthorized to edit this product"), 403
 
 @app.route('/api/products/edit', methods=['PUT'])
 def edit_product_submit_api():
