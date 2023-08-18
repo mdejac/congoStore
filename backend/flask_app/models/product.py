@@ -39,23 +39,6 @@ class Product:
         return False
 
     @classmethod
-    def add_product_api(cls, data):
-        if cls.validate_product_creation_data(data):
-            data = {'user_id' : session['user_id'],
-                    'name': data['name'],
-                    'description': data['description'],
-                    'category': data['category'],
-                    'quantity': data['quantity'],
-                    'price' : data['price'],
-                    'img_url' : data['img_url']}
-            
-            query = """INSERT INTO products (user_id, name, description, category, quantity, price, img_url)
-                    VALUES (%(user_id)s, %(name)s, %(description)s, %(category)s, %(quantity)s, %(price)s, %(img_url)s);"""   
-            user_id = connectToMySQL(cls.db).query_db(query, data)
-            return cls.serialize_product(cls.get_product_by_id(user_id))
-        return False
-
-    @classmethod
     def get_all_products(cls):
         query = """SELECT products.*, users.*,
                    GROUP_CONCAT(reviews.id SEPARATOR ',') AS review_by_ids,
@@ -484,30 +467,6 @@ class Product:
         return False
     
     @classmethod
-    def edit_product_api(cls, data):
-        if cls.isValid_product_id(data['id']):
-            data = {'user_id' : session['user_id'],
-                    'name': data['name'],
-                    'description': data['description'],
-                    'category': data['category'],
-                    'quantity': int(data['quantity']),
-                    'price' : float(data['price']),
-                    'img_url' : data['img_url'],
-                    'id': int(data['id'])}
-            
-            query = """UPDATE products SET
-                       name=%(name)s,
-                       description=%(description)s,
-                       category=%(category)s,
-                       quantity=%(quantity)s,
-                       price=%(price)s,
-                       img_url=%(img_url)s
-                       WHERE id=%(id)s;"""
-            connectToMySQL(cls.db).query_db(query, data)
-            return True
-        return False
-    
-    @classmethod
     def delete_product(cls, id):
         if session['user_id'] == (Product.get_product_by_id(id)).user_id:
             query = """DELETE FROM reviews
@@ -526,6 +485,15 @@ class Product:
         if connectToMySQL(cls.db).query_db(query, data):
             return True
         return False
+    
+    # Static Methods
+    @staticmethod
+    def is_number(data):
+        try:
+            float(data)
+            return True
+        except ValueError:
+            return False
     
     @staticmethod
     def validate_product_creation_data(data):
@@ -549,6 +517,52 @@ class Product:
             flash("Quantity can't be less than 0")
             is_valid = False
         return is_valid
+    
+    
+    # API Specific Methods
+
+    @classmethod
+    def add_product_api(cls, data):
+        if cls.validate_product_creation_data(data):
+            data = {'user_id' : session['user_id'],
+                    'name': data['name'],
+                    'description': data['description'],
+                    'category': data['category'],
+                    'quantity': data['quantity'],
+                    'price' : data['price'],
+                    'img_url' : data['img_url']}
+            
+            query = """INSERT INTO products (user_id, name, description, category, quantity, price, img_url)
+                    VALUES (%(user_id)s, %(name)s, %(description)s, %(category)s, %(quantity)s, %(price)s, %(img_url)s);"""   
+            user_id = connectToMySQL(cls.db).query_db(query, data)
+            return cls.serialize_product(cls.get_product_by_id(user_id))
+        return False
+    
+    @classmethod
+    def edit_product_api(cls, data):
+        if cls.isValid_product_id(data['id']):
+            data = {'user_id' : session['user_id'],
+                    'name': data['name'],
+                    'description': data['description'],
+                    'category': data['category'],
+                    'quantity': int(data['quantity']),
+                    'price' : float(data['price']),
+                    'img_url' : data['img_url'],
+                    'id': int(data['id'])}
+            
+            query = """UPDATE products SET
+                       name=%(name)s,
+                       description=%(description)s,
+                       category=%(category)s,
+                       quantity=%(quantity)s,
+                       price=%(price)s,
+                       img_url=%(img_url)s
+                       WHERE id=%(id)s;"""
+            connectToMySQL(cls.db).query_db(query, data)
+            return True
+        return False
+
+    # API Specific Static Methods
     
     @staticmethod
     def validate_product_creation_data_api(data):
@@ -581,14 +595,6 @@ class Product:
             errors['quantity'].append("Quantity can't be less than 0")
             is_valid = False
         return is_valid, errors
-    
-    @staticmethod
-    def is_number(data):
-        try:
-            float(data)
-            return True
-        except ValueError:
-            return False
         
     @staticmethod
     def serialize_product(product):
