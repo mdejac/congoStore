@@ -89,6 +89,7 @@ DROP TABLE IF EXISTS `products_in_carts`;
 CREATE TABLE `products_in_carts` (
   `product_id` int NOT NULL,
   `cart_id` int NOT NULL,
+  `quantity_to_purchase` int DEFAULT NULL,
   PRIMARY KEY (`product_id`,`cart_id`),
   KEY `fk_products_has_carts_carts1_idx` (`cart_id`),
   KEY `fk_products_has_carts_products1_idx` (`product_id`),
@@ -178,4 +179,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-08-17 21:30:24
+-- Dump completed on 2023-08-19 13:40:55
