@@ -52,6 +52,21 @@ class Review:
 
     # API Specific Methods
 
+    @classmethod
+    def add_review_api(cls, data, product_id):
+        if cls.validate_review_creation_data(data, product_id):
+            data = {'user_id' : data['user_id'],
+                    'product_id': product_id,
+                    'content': data['content'],
+                    'rating' : data['rating']
+                    }
+            
+            query = """INSERT INTO reviews (user_id, product_id, content, rating)
+                    VALUES (%(user_id)s, %(product_id)s, %(content)s, %(rating)s);"""   
+            connectToMySQL(cls.db).query_db(query, data)
+            return True
+        return False
+
     @staticmethod
     def validate_review_creation_data_api(data, product_id):
         is_valid = True

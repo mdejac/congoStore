@@ -10,6 +10,6 @@ def create_review_submit_api(product_id):
     data = request.get_json()
     isValid, errors = Review.validate_review_creation_data_api(data, product_id) 
     if isValid:
-        Review.add_review(data, product_id)
+        Review.add_review_api(data, product_id)
         return jsonify(message="Review added successfully")
     return jsonify(message="Invalid data", errors=errors)
