@@ -524,7 +524,7 @@ class Product:
     @classmethod
     def add_product_api(cls, data):
         if cls.validate_product_creation_data(data):
-            data = {'user_id' : session['user_id'],
+            data = {'user_id' : data['user_id'],
                     'name': data['name'],
                     'description': data['description'],
                     'category': data['category'],
@@ -541,8 +541,7 @@ class Product:
     @classmethod
     def edit_product_api(cls, data):
         if cls.isValid_product_id(data['id']):
-            data = {'user_id' : session['user_id'],
-                    'name': data['name'],
+            data = {'name': data['name'],
                     'description': data['description'],
                     'category': data['category'],
                     'quantity': int(data['quantity']),
