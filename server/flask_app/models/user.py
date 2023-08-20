@@ -260,7 +260,6 @@ class User:
             'last_name': user.last_name,
             'address': user.address,
             'email': user.email,
-            'password' : user.password,
             'created_at': user.created_at,
             'updated_at': user.updated_at
         }
