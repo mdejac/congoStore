@@ -20,6 +20,7 @@ class Product:
         self.updated_at = data['updated_at']
         self.creator = None
         self.reviews = []
+        self.quantity_to_purchase = data.get('quantity_to_purchase', None)
 
     @classmethod
     def add_product(cls, data):
@@ -610,6 +611,24 @@ class Product:
             'updated_at': product.updated_at,
             'creator': user.User.serialize_user(product.creator),
             'reviews': [review.Review.serialize_review(this_review) for this_review in product.reviews]
+        }
+
+        return serialized_product
+    
+    @staticmethod
+    def serialize_product_for_cart(product):
+        serialized_product = {
+            'id': product.id,
+            'user_id': product.user_id,
+            'name': product.name,
+            'description': product.description,
+            'category': product.category,
+            'quantity': product.quantity,
+            'quantity_to_purchase': product.quantity_to_purchase,
+            'price': product.price,
+            'img_url': product.img_url,
+            'created_at': product.created_at,
+            'updated_at': product.updated_at
         }
 
         return serialized_product
