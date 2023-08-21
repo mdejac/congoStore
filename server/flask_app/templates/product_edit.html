@@ -1,8 +1,60 @@
-<h1>Product edit page</h1>
+{% extends "base_template.html" %}
 
-Name : {{product.name}}
-Category : {{product.category}}
-Description : {{product.description}}
-Quantity : {{product.quantity}}
-Price : {{product.price}}
-Potential Image : {{product.img_url}}
+{% block title %}CongoStore {% endblock %}
+
+
+{% block nav_option %}<li><a class="nav-link" href="/products">Home</a></li>{% endblock %}
+
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+    <form action="/products/edit" method="post">
+         <div class="row">
+             <div class="col-md-6">
+                 <p><b>Edit product</b></p>
+                 <hr>
+                 <input type="hidden" name="id" value="{{product.id}}">
+                 <div class="form-group">
+                     <label for="name">Name</label>
+                     <input type="text" class="form-control" id="name" name='name' value="{{product.name}}"required>
+                 </div>
+
+                 <div class="form-group">
+                    <label for="category">Categories</label>
+                    <input type="text" class="form-control" id="category" name='category' value="{{product.category}}" required>
+                </div>
+                 
+                 <div class="form-group">
+                     <label for="description">Description</label>
+                     <textarea class="form-control" id="description" rows="3" name='description' required>{{product.description}}</textarea>
+                 </div>   
+             </div>
+
+             <div class="col-md-6">
+                 <p><b>Additional Information</b></p>
+                 <hr>
+                 <div class="form-group">
+                     <label for="price">Price</label>
+                     <input type="number" class="form-control" id="price" step="0.01" name="price" value="{{product.price}}" required>
+                 </div>
+                 
+                 <div class="form-group">
+                     <label for="number_sighted">Quantity</label>
+                     <input type="number" class="form-control" id="quantity" name="quantity" value="{{product.quantity}}" required>
+                 </div>
+
+                 <div class="form-group">
+                    <label for="img_url">Upload Product Image</label>
+                    <input type="text" class="form-control" id="img_url" value="default.jpg" name="img_url" value="{{product.img_url}}">
+                </div>
+                 
+                 <div class="text-right mt-3">
+                     <button type="submit" class="btn border-dark" style="background-color: #e1b294;">Submit</button>
+                 </div>
+             </div>
+         </div>
+    </form>
+ </div>
+
+{% endblock %}
