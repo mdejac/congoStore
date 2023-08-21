@@ -4,5 +4,16 @@
 
 
 {% block content %}
-
+{% if cart %}
+  <!-- Cart has items -->
+  <h2>Your Cart:</h2>
+  <ul>
+    {% for product in cart.products_in_cart %}
+      <li>{{ product.name }} - {{ product.quantity }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <!-- Cart is empty -->
+  <h2>Your Cart is Empty</h2>
+{% endif %}
 {% endblock %}
