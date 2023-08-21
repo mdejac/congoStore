@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginForm from './components/LoginForm';
+// import LoginForm from './components/LoginForm';
 import UserInfo from "./components/UserInfo";
 import ProductDetail from "./components/ProductDetail";
 import ProductList from "./components/ProductList";
-import Cart from "./components/Cart"
+import Cart from "./components/Cart";
+import RegLog from "./components/RegLog";
+import ReviewProduct from "./components/ReviewProduct";
+import NotFound from "./components/NotFound";
+import AddProduct from "./components/AddProduct";
+import EditProduct from "./components/EditProduct";
 
 import {
     fetchAllProducts,
@@ -36,9 +41,9 @@ function App() {
                 <Routes>
                     <Route path="/" element={<RegLog errors={errors} setErrors={setErrors} />} />
                     <Route path="/products" element={<ProductList allProducts={allProducts} setAllProducts={setAllProducts} cart={cart} setCart={setCart} />} />
-                    <Route path="/products/:products._id" element={<ProductDetail productOne={productOne} setProductOne={setProductOne} review={review} setReview={setReview} />} />
+                    <Route path="/products/:products._id" element={<ProductDetail productOne={productOne} setProductOne={setProductOne} review={review} setReview={setReview} allReviews={setAllReviews} />} />
                     <Route path="/users/:users._id" element={<UserInfo allCarts={allCarts} setAllCarts={setAllCarts} errors={errors} setErrors={setErrors} user={user} setUser={setUser} />} />
-                    <Route path="/users/:user._id/:cart._id" element={<Cart cart={cart} user={user} />} />
+                    <Route path="/users/:user._id/:cart._id" element={<Cart cart={cart} user={user} allProducts={allProducts} setAllProducts={allProducts} />} />
                     <Route path="/users/:user._id/:product._id" element={<EditProduct user={user} setUser={setUser} productOne={productOne} setProductOne={setProductOne} />} />
                     <Route path="/products/create/" element={<AddProduct user={user} setUser={setUser} allProducts={allProducts} setAllProducts={setAllProducts} />} />
                     <Route path="/products/:product._id/review" element={<ReviewProduct productOne={productOne} setProductOne={setProductOne} review={review} setReview={setReview} />} />

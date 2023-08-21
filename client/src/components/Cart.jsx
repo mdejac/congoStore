@@ -5,12 +5,11 @@ import { useParams } from 'react-router-dom';
 
 const Cart = (props) => {
     // const { cart._id } = useParams();
-    const { cart, setCart } = props;
-    const { user, setUser } = props;
+    const { cart, setCart, user, setUser, allProducts, setAllProducts } = props;
 
     useEffect(() => {
-        console.log(user, "user")
-        axios.get(`http://localhost:8000/api/users/${user._id}/${cart._id}`)
+        // console.log(user, "user")
+        axios.get(`http://localhost:5000/api/users/${user._id}/${cart._id}`)
             .then(res => {
                 console.log(res.data, "res.data")
                 console.log()
@@ -23,9 +22,12 @@ const Cart = (props) => {
             })
     }, [])
     return (
-        <div>Cart
+        <div>
+            {
+                allProducts.map((product, index) => (key = { cart._id })
+                    < p > { user.name }'s cart</p>
 
-
+            }
         </div>
     )
 }
