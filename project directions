@@ -91,6 +91,7 @@ Product Routes
 
 /api/products/edit, methods=PUT
 	{
+		 "id" : product_id,
     	 "name": "JSON Product - EDIT",
     	 "description": "Testing api EDIT. Defintitely not furniture",
     	 "category": "Misc",
@@ -112,3 +113,14 @@ Reviews
     	 "rating" : "*****"
 	}
 	returns errors object for validations or success message if valid.
+	
+Cart
+/api/carts/add_product
+	{
+	  "product_id":product_id,
+	  "cart_id": cart_id,
+	  "quantity_to_purchase":quantity_to_purchase
+	}
+	
+/api/carts/view/cart_id
+	returns json object of all items in cart with quantities to purchase
