@@ -35,8 +35,6 @@ class Cart:
                    WHERE carts.user_id = %(user_id)s AND carts.isPaid = 'false'
                    GROUP BY carts.id;"""
         results = connectToMySQL(cls.db).query_db(query, data)
-        print('********************')
-        print(results)
         if results == ():
             return []
 
