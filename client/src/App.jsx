@@ -21,22 +21,22 @@ function App() {
     const [allProductsByDescription, setAllProductsByDescription] = useState([]);
     const [productOne, setProductOne] = useState({});
     const [user, setUser] = useState({});
+    const [cart, setCart] = useState({});
+    const [allCarts, setAllCarts] = useState({});
     const [errors, setErrors] = useState({});
+    const [review, setReview] = useState({});
+    const [allReviews, setAllReviews] = useState({});
 
     return (
         <BrowserRouter>
             <div className='App'>
                 <h1 >Congo Superstore</h1>
                 <Routes>
-                    <Route path="/" element={<RegLog errors={errors} />} />
-                    <Route path="/pets" element={<Dashboard alltransports={alltransports} setAllTransports={setAllTransports} />} />
-                    {/* Not sure how to pass AddPet to UpdatePet????????????????? */}
-                    <Route path="/pets/new" element={<AddPet />} />
-                    <Route path="/pets/:id/edit" element={<EditPetTwo transport={transport} alltransports={alltransports} setTransport={setTransport} />} />
-                    {/* <Route path="/pets/:id/edit" element={<EditPet onSubmitProp={AddPet} alltransports={alltransports} */}
-                    {/* setAllTransports={setAllTransports} transport={transport} setTransport={setTransport} />} /> */}
-                    <Route path="/pets/:id/rescue" element={<AddRescue transport={transport} setTransport={setTransport} />} />
-                    <Route path="/pets/:id/transport" element={<AddTransport transport={transport} setTransport={setTransport} />} />
+                    <Route path="/" element={<RegLog errors={errors} setErrors={setErrors} />} />
+                    <Route path="/products" element={<ProductList allProducts={allProducts} setAllProducts={setAllProducts} cart={cart} setCart={setCart} />} />
+                    <Route path="/products/:products._id" element={<ProductDetail productOne={productOne} setProductOne={setProductOne} />} />
+                    <Route path="/users/:users._id" element={<UserInfo allCarts={allCarts} setAllCarts={setAllCarts} errors={errors} setErrors={setErrors} user={user} setUser={setUser} />} />
+                    <Route path="/users/:users._id/:carts._id" element={<Cart cart={cart} user={user} />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </div>
