@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { fetchAllProducts } from "./apiService"
 
 const BASE_URL = 'http://127.0.0.1:5000/api';
 
@@ -25,3 +26,14 @@ export const fetchUserById = (id) => {
 export const loginUser = (data) => {
     return axios.post(`${BASE_URL}/users/login`, data);
 }
+
+export const getProducts = async (searchTerm = '') => {
+    try {
+        const response = await axios.get(`/api/products?search=${searchTerm}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching products:", error);
+    }
+}
+
+

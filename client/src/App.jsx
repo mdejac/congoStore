@@ -1,82 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+// Importing components
 import LoginForm from './components/LoginForm';
-import UserInfo from "./components/UserInfo";
-import ProductDetail from "./components/ProductDetail";
-import ProductList from "./components/ProductList";
-import Dashboard from "./components/Dashboard";
-import {
-    fetchAllProducts,
-    fetchProductsByCategory,
-    fetchProductsByDescription,
-    fetchProductById,
-    fetchUserById,
-    loginUser
-} from './services/apiService';
+import ProductDetail from './components/ProductDetail';
+import ProductList from './components/ProductList';
+import SearchBar from './components/SearchBar';
+import ProductSellForm from './components/ProductSellForm';
+import Dashboard from './components/Dashboard';
+import UserInfo from './components/UserInfo';
 
 function App() {
-    const [allProducts, setAllProducts] = useState([]);
-    const [filteredProducts, setFilteredProducts] = useState([]);
-    const [productOne, setProductOne] = useState({});
-    const [user, setUser] = useState({});
-    const [errors, setErrors] = useState({});
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const products = await fetchAllProducts();
-                setAllProducts(products.data);
-                setFilteredProducts(products.data);
-
-                const singleProduct = await fetchProductById(4);
-                setProductOne(singleProduct.data);
-
-                const singleUser = await fetchUserById(1);
-                setUser(singleUser.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    const handleLogin = async (email, password) => {
-        try {
-            const response = await loginUser({ email, password });
-            if (response.data.errors) {
-                setErrors(response.data.errors);
-            } else {
-                setErrors({});
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
-    const handleSearch = (searchTerm) => {
-        const results = allProducts.filter(product =>
-            product.name.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setFilteredProducts(results);
-    };
-
     return (
-        <>
-            <LoginForm onLogin={handleLogin} errors={errors} />
-            
-            {user && <UserInfo user={user} />}
+        <Router>
+            <div>
+                <SearchBar onSearch={/* Function to handle search goes here */} />
+                
+                <Switch>
+                    {/* Route for the main landing page, which is the login/registration form */}
+                    <Route exact path="/" component={LoginForm} />
 
-            <Dashboard products={filteredProducts} onSearch={handleSearch} />
+                    {/* Route for product details when a user clicks on a product */}
+                    <Route path="/product/:id" component={ProductDetail} />
 
-            {/* Optionally keep these if you want separate detailed views */}
-            <ProductDetail product={productOne} />
+                    {/* Route to display the dashboard */}
+                    <Route path="/dashboard">
+                        <Dashboard />
+                        <ProductList title="Products" products={/* Products data should come from a source, e.g., API, state, etc. */} />
+                    </Route>
 
-            {/* Note: You might want to remove these lists if they are not necessary now that you have the Dashboard */}
-            {/* 
-            <ProductList title="All Products by Category *furniture filter*" products={allProductsByCategory} />
-            <ProductList title="All Products by Description *furniture filter*" products={allProductsByDescription} />
-            */}
-        </>
+                    {/* Route for sellers to list a new product */}
+                    <Route path="/sell" component={ProductSellForm} />
+
+                    {/* Route for user information */}
+                    <Route path="/user/:id" component={UserInfo} />
+                </Switch>
+            </div>
+        </Router>
     );
 }
 
