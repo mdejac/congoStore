@@ -20,6 +20,12 @@ class Cart:
                 'product_id': data['product_id'],
                 'quantity_to_purchase' : data['quantity_to_purchase']
         }
+
+        if not user.User.isValid_user_id(data['user_id']):
+            return {'message' : 'Request error', 'errors' : ['User does not exist']}
+        
+        if not product.Product.isValid_product_id(data['product_id']):
+            return {'message' : 'Request error', 'errors' : ['Product does not exist']}
         
         get_cart_query = """SELECT id FROM carts WHERE user_id = %(user_id)s AND isPaid = 'false';"""
         get_cart_result = connectToMySQL(cls.db).query_db(get_cart_query, data)
@@ -38,7 +44,6 @@ class Cart:
                                         VALUES (%(cart_id)s, %(product_id)s, %(quantity_to_purchase)s);"""
             connectToMySQL(cls.db).query_db(add_item_to_cart_query, data)
         else:
-            print(product_in_cart_result)
             data['quantity_to_purchase'] = data['quantity_to_purchase'] + product_in_cart_result[0]['quantity_to_purchase']
             update_item_in_cart_quantity = """UPDATE products_in_carts SET
                                               quantity_to_purchase = %(quantity_to_purchase)s
@@ -70,6 +75,8 @@ class Cart:
                    WHERE carts.id = %(cart_id)s
                    GROUP BY carts.id;"""
         results = connectToMySQL(cls.db).query_db(query, data)
+        if results == ():
+            return {'message' : 'Request error', 'errors' : ['Cart does not exist']}
 
         cart = cls(results[0])
         product_ids = results[0]['product_ids'].split(',') if results[0]['product_ids'] else ''
@@ -102,6 +109,49 @@ class Cart:
                
         return cls.serialize_cart(cart)
     
+    @classmethod
+    def edit_cart_api(cls, data):
+        data = {
+            "cart_id" : data['cart_id'],
+            "product_id" : data['product_id'],
+            "quantity_to_purchase" : data['quantity_to_purchase']
+        }
+        if not data['quantity_to_purchase'] == 0:
+            update_item_in_cart_quantity = """UPDATE products_in_carts SET
+                                            quantity_to_purchase = %(quantity_to_purchase)s
+                                            WHERE cart_id = %(cart_id)s AND product_id = %(product_id)s;"""
+            connectToMySQL(cls.db).query_db(update_item_in_cart_quantity, data)
+        else:
+            cls.remove_item_from_cart(data)
+        return_cart_query = """SELECT * FROM carts WHERE id = %(cart_id)s;"""
+        return_cart = connectToMySQL(cls.db).query_db(return_cart_query, {'cart_id' : data['cart_id']})    
+        
+        return jsonify({'success' : True, 'cart_data' : return_cart})
+
+    @classmethod
+    def empty_cart_api(cls, data):
+        query = """DELETE FROM products_in_carts
+                   WHERE cart_id = %(id)s;"""
+        connectToMySQL(cls.db).query_db(query,{'id':data['cart_id']})
+
+    @classmethod
+    def remove_item_from_cart(cls, data):
+        data = {
+            "cart_id" : data['cart_id'],
+            "product_id" : data['product_id']
+        }
+        query = """DELETE FROM products_in_carts
+                   WHERE cart_id = %(cart_id)s AND product_id = %(product_id)s;"""
+        connectToMySQL(cls.db).query_db(query, data)
+
+    @classmethod
+    def view_paid_carts_by_user_id_api(cls, user_id):
+        pass
+
+    @classmethod
+    def checkout_cart_by_id_api(cls, cart_id):
+        pass
+
     @staticmethod
     def serialize_cart(cart):
         serialized_data = {

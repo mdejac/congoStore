@@ -481,7 +481,7 @@ class Product:
     @classmethod
     def isValid_product_id(cls, id):
         data = {'id' : id}
-        query = """SELECT * FROM products
+        query = """SELECT id FROM products
                    WHERE id = %(id)s;"""
         if connectToMySQL(cls.db).query_db(query, data):
             return True
