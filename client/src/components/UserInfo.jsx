@@ -8,7 +8,7 @@ const UserInfo = (props) => {
     const { user, setUser } = props;
     useEffect(() => {
         console.log(user, "user")
-        axios.get(`http://localhost:8000/api/users/${users._id}/${carts._id}`)
+        axios.get(`http://localhost:8000/api/users/${user._id}/${cart._id}`)
             .then(res => {
                 console.log(res.data, "res.data")
                 console.log()
