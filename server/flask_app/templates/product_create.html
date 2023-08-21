@@ -1,1 +1,56 @@
-<h1>Product Create Page</h1>
+{% extends "base_template.html" %}
+
+{% block nav_option %}<li><a class="nav-link" href="/products">Home</a></li>{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid mt-4">
+    <form action="/products/create" method="post">
+         <div class="row">
+             <div class="col-md-6">
+                 <p><b>Add a new product</b></p>
+                 <hr>
+                 
+                 <div class="form-group">
+                     <label for="name">Name</label>
+                     <input type="text" class="form-control" id="name" name='name' required>
+                 </div>
+
+                 <div class="form-group">
+                    <label for="category">Categories</label>
+                    <input type="text" class="form-control" id="category" name='category' required>
+                </div>
+                 
+                 <div class="form-group">
+                     <label for="description">Description</label>
+                     <textarea class="form-control" id="description" rows="3" name='description' required></textarea>
+                 </div>   
+             </div>
+
+             <div class="col-md-6">
+                 <p><b>Additional Information</b></p>
+                 <hr>
+                 <div class="form-group">
+                     <label for="price">Price</label>
+                     <input type="number" class="form-control" id="price" step="0.01" name="price" required>
+                 </div>
+                 
+                 <div class="form-group">
+                     <label for="number_sighted">Quantity</label>
+                     <input type="number" class="form-control" id="quantity" name="quantity" required>
+                 </div>
+
+                 <div class="form-group">
+                    <label for="img_url">Upload Product Image</label>
+                    <input type="text" class="form-control" id="img_url" value="default.jpg" name="img_url">
+                </div>
+                 
+                 <div class="text-right mt-3">
+                     <button type="submit" class="btn border-dark" style="background-color: #e1b294;">Submit</button>
+                 </div>
+             </div>
+         </div>
+    </form>
+ </div>
+
+{% endblock %}

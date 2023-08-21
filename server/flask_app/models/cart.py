@@ -15,6 +15,67 @@ class Cart:
         self.products_in_cart = []
 
     @classmethod
+    def view_cart_by_user_id(cls, user_id):
+        data = {'user_id': user_id}
+        query = """SELECT carts.*,
+                   GROUP_CONCAT(products.id SEPARATOR ',') AS product_ids,
+                   GROUP_CONCAT(products.user_id SEPARATOR ',') AS product_user_ids,
+                   GROUP_CONCAT(products.name SEPARATOR ',') AS product_names,
+                   GROUP_CONCAT(products.description SEPARATOR ',') AS product_descriptions,
+                   GROUP_CONCAT(products.category SEPARATOR ',') AS product_categories,
+                   GROUP_CONCAT(products.quantity SEPARATOR ',') AS product_quantities,
+                   GROUP_CONCAT(products_in_carts.quantity_to_purchase SEPARATOR ',') AS product_quantities_in_cart,
+                   GROUP_CONCAT(products.price SEPARATOR ',') AS product_prices,
+                   GROUP_CONCAT(products.img_url SEPARATOR ',') AS product_img_urls,
+                   GROUP_CONCAT(products.created_at SEPARATOR ',') AS product_created_ats,
+                   GROUP_CONCAT(products.updated_at SEPARATOR ',') AS product_updated_ats
+                   FROM carts
+                   LEFT JOIN products_in_carts ON carts.id = products_in_carts.cart_id
+                   LEFT JOIN products ON products_in_carts.product_id = products.id
+                   WHERE carts.user_id = %(user_id)s AND carts.isPaid = 'false'
+                   GROUP BY carts.id;"""
+        results = connectToMySQL(cls.db).query_db(query, data)
+        print('********************')
+        print(results)
+        if results == ():
+            return []
+
+        cart = cls(results[0])
+        product_ids = results[0]['product_ids'].split(',') if results[0]['product_ids'] else ''
+        product_user_ids = results[0]['product_user_ids'].split(',') if results[0]['product_user_ids'] else ''
+        product_names = results[0]['product_names'].split(',') if results[0]['product_names'] else ''
+        product_descriptions = results[0]['product_descriptions'].split(',') if results[0]['product_descriptions'] else ''
+        product_categories = results[0]['product_categories'].split(',') if results[0]['product_categories'] else ''
+        product_quantities = results[0]['product_quantities'].split(',') if results[0]['product_quantities'] else ''
+        product_quantities_in_cart = results[0]['product_quantities_in_cart'].split(',') if results[0]['product_quantities_in_cart'] else ''
+        product_prices = results[0]['product_prices'].split(',') if results[0]['product_prices'] else ''
+        product_img_urls = results[0]['product_img_urls'].split(',') if results[0]['product_img_urls'] else ''
+        product_created_ats = results[0]['product_created_ats'].split(',') if results[0]['product_created_ats'] else ''
+        product_updated_ats = results[0]['product_updated_ats'].split(',') if results[0]['product_updated_ats'] else ''
+        
+        for i in range(len(product_ids)):
+            product_data = {
+                'id': product_ids[i],
+                'user_id': product_user_ids[i],
+                'name': product_names[i],
+                'description': product_descriptions[i],
+                'category': product_categories[i],
+                'quantity': product_quantities[i],
+                'quantity_to_purchase': product_quantities_in_cart[i],
+                'price': product_prices[i],
+                'img_url': product_img_urls[i],
+                'created_at': product_created_ats[i],
+                'updated_at': product_updated_ats[i],
+            }
+            cart.products_in_cart.append(product.Product(product_data))
+               
+        return cart
+    
+    
+    
+    # API specific methods
+    
+    @classmethod
     def add_to_cart_api(cls, data):
         data = {'user_id' : data['user_id'],
                 'product_id': data['product_id'],
@@ -55,8 +116,8 @@ class Cart:
         return jsonify({'success' : True, 'cart_data' : return_cart})
     
     @classmethod
-    def view_cart_by_id_api(cls, cart_id):
-        data = {'cart_id': cart_id}
+    def view_cart_by_user_id_api(cls, user_id):
+        data = {'user_id': user_id}
         query = """SELECT carts.*,
                    GROUP_CONCAT(products.id SEPARATOR ',') AS product_ids,
                    GROUP_CONCAT(products.user_id SEPARATOR ',') AS product_user_ids,
@@ -72,7 +133,7 @@ class Cart:
                    FROM carts
                    LEFT JOIN products_in_carts ON carts.id = products_in_carts.cart_id
                    LEFT JOIN products ON products_in_carts.product_id = products.id
-                   WHERE carts.id = %(cart_id)s
+                   WHERE carts.user_id = %(user_id)s AND carts.isPaid = 'false'
                    GROUP BY carts.id;"""
         results = connectToMySQL(cls.db).query_db(query, data)
         if results == ():
@@ -149,7 +210,7 @@ class Cart:
         pass
 
     @classmethod
-    def checkout_cart_by_id_api(cls, cart_id):
+    def checkout_cart_by_id_api(cls, user_id):
         pass
 
     @staticmethod
