@@ -1,77 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+// Importing components
 import LoginForm from './components/LoginForm';
-import UserInfo from "./components/UserInfo";
-import ProductDetail from "./components/ProductDetail";
-import ProductList from "./components/ProductList";
-import { 
-    fetchAllProducts, 
-    fetchProductsByCategory, 
-    fetchProductsByDescription, 
-    fetchProductById,
-    fetchUserById,
-    loginUser
-} from './services/apiService';
+import ProductDetail from './components/ProductDetail';
+import ProductList from './components/ProductList';
+import SearchBar from './components/SearchBar';
+import ProductSellForm from './components/ProductSellForm';
+import Dashboard from './components/Dashboard';
+import UserInfo from './components/UserInfo';
 
 function App() {
-    const [allProducts, setAllProducts] = useState([]);
-    const [allProductsByCategory, setAllProductsByCategory] = useState([]);
-    const [allProductsByDescription, setAllProductsByDescription] = useState([]);
-    const [productOne, setProductOne] = useState({});
-    const [user, setUser] = useState({});
-    const [errors, setErrors] = useState({});
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const products = await fetchAllProducts();
-                setAllProducts(products.data);
-
-                const productsByCategory = await fetchProductsByCategory('furniture');
-                setAllProductsByCategory(productsByCategory.data);
-
-                const productsByDescription = await fetchProductsByDescription('furniture');
-                setAllProductsByDescription(productsByDescription.data);
-
-                const singleProduct = await fetchProductById(4);
-                setProductOne(singleProduct.data);
-
-                const singleUser = await fetchUserById(1);
-                setUser(singleUser.data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    const handleLogin = async (email, password) => {
-        try {
-            const response = await loginUser({ email, password });
-            if (response.data.errors) {
-                setErrors(response.data.errors);
-            } else {
-                setErrors({});
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
-
     return (
-        <>
-            <LoginForm onLogin={handleLogin} errors={errors} />
+        <Router>
+            <div>
+                <SearchBar onSearch={/* Function to handle search goes here */} />
+                
+                <Switch>
+                    {/* Route for the main landing page, which is the login/registration form */}
+                    <Route exact path="/" component={LoginForm} />
 
-            <UserInfo user={user} />
+                    {/* Route for product details when a user clicks on a product */}
+                    <Route path="/product/:id" component={ProductDetail} />
 
-            <ProductDetail product={productOne} />
+                    {/* Route to display the dashboard */}
+                    <Route path="/dashboard">
+                        <Dashboard />
+                        <ProductList title="Products" products={/* Products data should come from a source, e.g., API, state, etc. */} />
+                    </Route>
 
-            <ProductList title="All Products by Category *furniture filter*" products={allProductsByCategory} />
+                    {/* Route for sellers to list a new product */}
+                    <Route path="/sell" component={ProductSellForm} />
 
-            <ProductList title="All Products by Description *furniture filter*" products={allProductsByDescription} />
-
-            <ProductList title="All Products" products={allProducts} />
-        </>
+                    {/* Route for user information */}
+                    <Route path="/user/:id" component={UserInfo} />
+                </Switch>
+            </div>
+        </Router>
     );
 }
 
