@@ -14,7 +14,7 @@ const Register = () => {
     })
 
     const changeHandler = (e) => {
-        setUserInfo({ ...user, [e.target.name]: e.target.value })
+        setUser({ ...user, [e.target.name]: e.target.value })
     }
 
     const submitHandler = (e) => {
