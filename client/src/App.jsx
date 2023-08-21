@@ -3,10 +3,11 @@ import LoginForm from './components/LoginForm';
 import UserInfo from "./components/UserInfo";
 import ProductDetail from "./components/ProductDetail";
 import ProductList from "./components/ProductList";
-import { 
-    fetchAllProducts, 
-    fetchProductsByCategory, 
-    fetchProductsByDescription, 
+import Dashboard from "./components/Dashboard";
+import {
+    fetchAllProducts,
+    fetchProductsByCategory,
+    fetchProductsByDescription,
     fetchProductById,
     fetchUserById,
     loginUser
@@ -14,8 +15,7 @@ import {
 
 function App() {
     const [allProducts, setAllProducts] = useState([]);
-    const [allProductsByCategory, setAllProductsByCategory] = useState([]);
-    const [allProductsByDescription, setAllProductsByDescription] = useState([]);
+    const [filteredProducts, setFilteredProducts] = useState([]);
     const [productOne, setProductOne] = useState({});
     const [user, setUser] = useState({});
     const [errors, setErrors] = useState({});
@@ -25,12 +25,7 @@ function App() {
             try {
                 const products = await fetchAllProducts();
                 setAllProducts(products.data);
-
-                const productsByCategory = await fetchProductsByCategory('furniture');
-                setAllProductsByCategory(productsByCategory.data);
-
-                const productsByDescription = await fetchProductsByDescription('furniture');
-                setAllProductsByDescription(productsByDescription.data);
+                setFilteredProducts(products.data);
 
                 const singleProduct = await fetchProductById(4);
                 setProductOne(singleProduct.data);
@@ -58,19 +53,29 @@ function App() {
         }
     };
 
+    const handleSearch = (searchTerm) => {
+        const results = allProducts.filter(product =>
+            product.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredProducts(results);
+    };
+
     return (
         <>
             <LoginForm onLogin={handleLogin} errors={errors} />
+            
+            {user && <UserInfo user={user} />}
 
-            <UserInfo user={user} />
+            <Dashboard products={filteredProducts} onSearch={handleSearch} />
 
+            {/* Optionally keep these if you want separate detailed views */}
             <ProductDetail product={productOne} />
 
+            {/* Note: You might want to remove these lists if they are not necessary now that you have the Dashboard */}
+            {/* 
             <ProductList title="All Products by Category *furniture filter*" products={allProductsByCategory} />
-
             <ProductList title="All Products by Description *furniture filter*" products={allProductsByDescription} />
-
-            <ProductList title="All Products" products={allProducts} />
+            */}
         </>
     );
 }
