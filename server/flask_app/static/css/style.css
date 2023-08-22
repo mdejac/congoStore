@@ -1,0 +1,61 @@
+.scroll-wrapper {
+    position: relative;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+.scroll-container {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 10px;
+}
+
+.item {
+    flex: 0 0 auto;
+    width: 300px;
+    height: 300px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  .item a {
+    display: block;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    height: 4em;
+    line-height: 1em; 
+  }
+
+  .item img {
+    max-width: 100px;
+    height: auto;
+  }
+
+.card-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  max-height: 6em;
+}
+
+.scroll-controls {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.scroll-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.product_view_img {
+  width: 200px;
+}

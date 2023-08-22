@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 
 from flask_app.models.user import User
+from flask_app.models.product import Product
 from flask_app import app
 
 
@@ -17,7 +18,8 @@ def register_submit():
 @app.route('/users/profile')
 def profile():
     if 'user_id' in session:
-        return render_template('profile.html')
+        user_products = Product.get_all_products_by_user_id(session['user_id'])
+        return render_template('profile_view.html', user_products=user_products)
     return redirect('/')
 
 @app.route('/users/login', methods=['POST'])

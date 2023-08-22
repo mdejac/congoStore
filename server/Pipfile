@@ -8,8 +8,10 @@ pymysql = "*"
 flask = "*"
 flask-bcrypt = "*"
 flask-cors = "*"
+
 flask-session = "*"
 cryptography = "*"
+
 
 [dev-packages]
 

@@ -10,6 +10,11 @@ def add_product_to_cart_api():
     data = request.get_json()
     return Cart.add_to_cart_api(data)
 
-@app.route('/api/carts/view/<int:cart_id>')
-def view_cart_api(cart_id):
-    return Cart.view_cart_by_id_api(cart_id)
+@app.route('/api/carts/view/<int:user_id>')
+def view_cart_api(user_id):
+    return Cart.view_cart_by_user_id_api(user_id)
+
+@app.route('/api/carts/edit', methods=['POST'])
+def edit_cart_api():
+    data = request.get_json()
+    return Cart.edit_cart_api(data)

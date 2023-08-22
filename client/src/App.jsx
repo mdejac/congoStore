@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import LoginForm from './components/LoginForm';
@@ -10,6 +11,9 @@ import ReviewProduct from "./components/ReviewProduct";
 import NotFound from "./components/NotFound";
 import AddProduct from "./components/AddProduct";
 import EditProduct from "./components/EditProduct";
+import SearchBar from './components/SearchBar';
+import ProductSellForm from './components/ProductSellForm';
+import Dashboard from './components/Dashboard';
 
 import {
     fetchAllProducts,
@@ -19,8 +23,7 @@ import {
     fetchUserById,
     loginUser
 } from './services/apiService';
-import EditProduct from "./components/EditProduct";
-import AddProduct from "./components/AddProduct";
+
 
 function App() {
     const [allProducts, setAllProducts] = useState([]);
@@ -39,16 +42,23 @@ function App() {
             <div className='App'>
                 <h1 >Congo Superstore</h1>
                 <h2>Welcome {user.name}</h2>
+                <SearchBar onSearch={/* Function to handle search goes here */} />
+                
                 <Routes>
                     <Route path="/" element={<RegLog errors={errors} setErrors={setErrors} />} />
                     <Route path="/products" element={<ProductList allProducts={allProducts} setAllProducts={setAllProducts} cart={cart} setCart={setCart} />} />
-                    <Route path="/products/:products._id" element={<ProductDetail productOne={productOne} setProductOne={setProductOne} review={review} setReview={setReview} allReviews={setAllReviews} />} />
-                    <Route path="/users/:users._id" element={<UserInfo cart={cart} setCart={setCart} allCarts={allCarts} setAllCarts={setAllCarts} errors={errors} setErrors={setErrors} user={user} setUser={setUser} />} />
+                    <Route path="/products/:id" element={<ProductDetail productOne={productOne} setProductOne={setProductOne} review={review} setReview={setReview} allReviews={setAllReviews} />} />
+                    <Route path="/users/:id" element={<UserInfo cart={cart} setCart={setCart} allCarts={allCarts} setAllCarts={setAllCarts} errors={errors} setErrors={setErrors} user={user} setUser={setUser} />} />
                     <Route path="/users/:user._id/:cart._id" element={<Cart cart={cart} user={user} allProducts={allProducts} setAllProducts={allProducts} />} />
                     <Route path="/users/:user._id/:product._id" element={<EditProduct user={user} setUser={setUser} productOne={productOne} setProductOne={setProductOne} />} />
                     <Route path="/products/create/" element={<AddProduct user={user} setUser={setUser} allProducts={allProducts} setAllProducts={setAllProducts} />} />
                     <Route path="/products/:product._id/review" element={<ReviewProduct productOne={productOne} setProductOne={setProductOne} review={review} setReview={setReview} />} />
                     <Route path="*" element={<NotFound />} />
+                    <Route path="/sell" component={ProductSellForm} />
+                    <Route path="/dashboard">
+                        <Dashboard />
+                        <ProductList title="Products" products={/* Products data should come from a source, e.g., API, state, etc. */} />
+                    </Route>
                 </Routes>
             </div>
         </BrowserRouter>
@@ -109,6 +119,7 @@ return (
         <ProductList title="All Products" products={allProducts} />
     </>
 );
+
 }
 
 export default App;
