@@ -13,7 +13,7 @@ const Cart = (props) => {
             .then(res => {
                 console.log(res.data, "res.data")
                 console.log()
-                setUser(res.data);
+                setCart(res.data);
             })
             .catch((err) => {
                 console.log(err.response);
@@ -23,9 +23,17 @@ const Cart = (props) => {
     }, [])
     return (
         <div>
+            < p > {user.name}'s cart</p>
             {
-                allProducts.map((product, index) => (key = { cart._id })
-                    < p > { user.name }'s cart</p>
+                allProducts.map((product, index) => (<div key={cart._id}>
+                    <p>Product: {product.name}</p>
+                    {/* <p>{product.image}</p> */}
+                    <p>Price: {product.price}</p>
+                    <p>Quantity: {product.quantity}</p>
+                    <p>Total: {product.price} x {product.quantity}</p>
+                </div>))
+
+
 
             }
         </div>
