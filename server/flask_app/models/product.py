@@ -14,7 +14,7 @@ class Product:
         self.description = data['description']
         self.category = data['category']
         self.quantity = data['quantity']
-        self.price = data['price']
+        self.price = float(data['price'])
         self.img_url = data['img_url']
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
