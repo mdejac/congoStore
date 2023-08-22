@@ -4,22 +4,75 @@
 
 
 {% block content %}
+<div class="container">
 
-<h1>Product View page</h1>
-<img src="{{url_for('static', filename=product.img_url)}}" class="product_view_img" alt="{{ product.img_url }}">
-<p>Name : {{product.name}}</p>
-<p>Category : {{product.category}}</p>
-<p>Description : {{product.description}}</p>
-<p>Quantity : {{product.quantity}}</p>
-<p>Price : {{product.price}}</p>
-<p>Number of reviews : {{ product.reviews|length }}</p>
-{% for review in product.reviews %}
-<p>Product id : {{review.product_id}}</p>
-<p>Posted id : {{review.user_id}}</p>
-<p>Content : {{review.content}}</p>
-<p>Rating : {{review.rating}}</p>
-<p>Posted By : {{review.creator.first_name}} {{review.creator.last_name}}</p>
-<p>Address : {{review.creator.address}}</p>
-<p>Email : {{review.creator.email}}</p>
-{% endfor %}
+    <h1 class="mb-5">{{product.name}}</h1>
+    <div class="row mb-3">
+        <div class="col">
+            <img src="{{ url_for('static', filename=product.img_url) }}" class="product_view_img" alt="{{ product.img_url }}">
+        </div>
+        <div class="col">
+            <p>Category: {{ product.category }}</p>
+            <p>Seller: {{product.creator.first_name}} {{product.creator.last_name}}</p>
+            <p>Description: {{ product.description }}</p>
+            <p>Price: {{ product.price }}
+                {% if product.quantity <= 10 %}
+                <span class="text-danger">
+                 Buy now! Only {{product.quantity}} in stock.
+                </span>
+                {% endif %}
+            </p>
+            {% if product.quantity > 0 %}
+                <form action="/carts/add_product" method="post">
+                    <input type="hidden" name="product_id" value="{{product.id}}">
+                    <label for="quantity">Quantity:</label>
+                    <input type="number" id="quantity" name="quantity_to_purchase" value="1" min="1" max="{{ product.quantity }}">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            {% else %}
+                <p>Out of Stock</p>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-6">
+            <div class="d-flex justify-content-between">
+                <h5>Product Reviews</h5>
+                <h5>Rating</h5>
+            </div>
+            {% for review in product.reviews %}
+                <div class="row">
+                    <div class="col-sm-10">
+                        <p class="mb-1">{{ review.created_at | datetimeformat }} : {{review.creator.first_name}} {{review.creator.last_name}}</p>
+                        <div class="review-content">
+                            <p>{{review.content}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <p class="text-end">{{review.rating}}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-5 offset-1 review-card">
+            <form action="/reviews/{{ product.id }}/create" method="POST">
+                <label for="content">Leave a review:</label>
+                <textarea name="content" id="content" rows="5" class="form-control"></textarea>
+                <div class="d-flex justify-content-between align-items-center mt-2 mb-2">
+                    <select id="rating" name="rating" class="form-select form-select-sm">
+                        <option selected>Select a rating</option>
+                        <option value="*">*</option>
+                        <option value="**">**</option>
+                        <option value="***">***</option>
+                        <option value="****">****</option>
+                        <option value="*****">*****</option>
+                    </select>
+                    <button type="submit" class="btn-md btn-primary">Submit Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
