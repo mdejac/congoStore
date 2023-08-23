@@ -9,5 +9,5 @@ from flask_app import app
 def create_review_submit(product_id):
     if 'user_id' in session:
         Review.add_review(request.form, product_id)
-        return redirect('/products/view/{product_id}')
+        return redirect(f'/products/view/{product_id}')
     return redirect('/')

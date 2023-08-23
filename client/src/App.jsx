@@ -1,42 +1,24 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
-// Importing components
-import LoginForm from './components/LoginForm';
-import ProductDetail from './components/ProductDetail';
-import ProductList from './components/ProductList';
-import SearchBar from './components/SearchBar';
-import ProductSellForm from './components/ProductSellForm';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import RegLog from "./components/RegLog";
 import Dashboard from './components/Dashboard';
-import UserInfo from './components/UserInfo';
+import ProductCreate from "./components/ProductCreate";
 
 
 function App() {
+    
     return (
-        <div className='App'>
-            <BrowserRouter>
-              
-                    {/* <SearchBar onSearch=Function to handle search goes here /> */}   
-                    <Routes>
-                        {/* Route for the main landing page, which is the login/registration form */}
-                        <Route path="/" Component={LoginForm} />
-
-                        {/* Route to display the dashboard */}
-                        <Route path="/dashboard" Component={Dashboard}/>
-
-                        {/* Route for product details when a user clicks on a product */}
-                        <Route path="/product/:id" Component={ProductDetail} />
-
-
-                        {/* Route for sellers to list a new product */}
-                        <Route path="/sell" Component={ProductSellForm} />
-
-                        {/* Route for user information */}
-                        <Route path="/user/:id" Component={UserInfo} />
-                    </Routes>
-            </BrowserRouter>
-        </div>
-    );
+        <BrowserRouter>
+            <div className='App'>
+                <h1 >Congo Superstore</h1>           
+            <Routes>
+                <Route path="/" element={<RegLog/>} />
+                <Route path="/products" element={<Dashboard/>} />
+                <Route path="/products/create" element={<ProductCreate/>} />
+            </Routes>
+            </div>
+        </BrowserRouter>
+    )
 }
 
 export default App;

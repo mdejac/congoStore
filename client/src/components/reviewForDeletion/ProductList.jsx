@@ -1,5 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { fetchAllProducts } from "../services/apiService";
+
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+
+// import { fetchAllProducts } from "./services/path_to_apiservice";
 
 function ProductList({ title }) {
     const [products, setProducts] = useState([]);
@@ -22,10 +27,13 @@ function ProductList({ title }) {
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error.message}</div>;
 
+
     return (
         <div>
             <h1>{title}</h1>
             <ul>
+
+
             {products.map((product) => (
     <li key={product.id}>
         <p>ID: {product.id}</p>
@@ -47,6 +55,7 @@ function ProductList({ title }) {
         </ul>
     </li>
 ))}
+
             </ul>
         </div>
     );

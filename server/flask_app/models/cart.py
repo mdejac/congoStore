@@ -15,6 +15,39 @@ class Cart:
         self.products_in_cart = []
 
     @classmethod
+    def add_to_cart(cls, data):
+        data = {'user_id' : session['user_id'],
+                'product_id': data['product_id'],
+                'quantity_to_purchase' : data['quantity_to_purchase']
+        }
+        
+        get_cart_query = """SELECT id FROM carts WHERE user_id = %(user_id)s AND isPaid = False;"""
+        get_cart_result = connectToMySQL(cls.db).query_db(get_cart_query, data)
+        if get_cart_result == ():
+            create_cart_query = """INSERT INTO carts (user_id) VALUES (%(user_id)s);"""
+            cart_id = connectToMySQL(cls.db).query_db(create_cart_query, data)
+        else:
+            cart_id = get_cart_result[0]['id']
+
+        data['cart_id'] = cart_id
+        product_in_cart_query = """SELECT * FROM products_in_carts WHERE cart_id = %(cart_id)s AND product_id = %(product_id)s;"""
+        product_in_cart_result = connectToMySQL(cls.db).query_db(product_in_cart_query, data)
+        if product_in_cart_result == () or product_in_cart_result == False:
+            add_item_to_cart_query = """INSERT INTO products_in_carts (cart_id, product_id, quantity_to_purchase)
+                                        VALUES (%(cart_id)s, %(product_id)s, %(quantity_to_purchase)s);"""
+            connectToMySQL(cls.db).query_db(add_item_to_cart_query, data)
+        else:
+            data['quantity_to_purchase'] = data['quantity_to_purchase'] + product_in_cart_result[0]['quantity_to_purchase']
+            update_item_in_cart_quantity = """UPDATE products_in_carts SET
+                                              quantity_to_purchase = %(quantity_to_purchase)s
+                                              WHERE cart_id = %(cart_id)s AND product_id = %(product_id)s;"""
+            connectToMySQL(cls.db).query_db(update_item_in_cart_quantity, data)
+        return_cart_query = """SELECT * FROM carts WHERE id = %(cart_id)s;"""
+        return_cart = connectToMySQL(cls.db).query_db(return_cart_query, {'cart_id' : cart_id})    
+        
+        return return_cart
+
+    @classmethod
     def view_cart_by_user_id(cls, user_id):
         data = {'user_id': user_id}
         query = """SELECT carts.*,
@@ -32,7 +65,7 @@ class Cart:
                    FROM carts
                    LEFT JOIN products_in_carts ON carts.id = products_in_carts.cart_id
                    LEFT JOIN products ON products_in_carts.product_id = products.id
-                   WHERE carts.user_id = %(user_id)s AND carts.isPaid = 'false'
+                   WHERE carts.user_id = %(user_id)s AND carts.isPaid = False
                    GROUP BY carts.id;"""
         results = connectToMySQL(cls.db).query_db(query, data)
         if results == ():
@@ -86,11 +119,10 @@ class Cart:
         if not product.Product.isValid_product_id(data['product_id']):
             return {'message' : 'Request error', 'errors' : ['Product does not exist']}
         
-        get_cart_query = """SELECT id FROM carts WHERE user_id = %(user_id)s AND isPaid = 'false';"""
+        get_cart_query = """SELECT id FROM carts WHERE user_id = %(user_id)s AND isPaid = False;"""
         get_cart_result = connectToMySQL(cls.db).query_db(get_cart_query, data)
         if get_cart_result == ():
-            create_cart_query = """INSERT INTO carts (user_id, isPaid) VALUES (%(user_id)s, %(isPaid)s);"""
-            data['isPaid'] = 'false'
+            create_cart_query = """INSERT INTO carts (user_id) VALUES (%(user_id)s);"""
             cart_id = connectToMySQL(cls.db).query_db(create_cart_query, data)
         else:
             cart_id = get_cart_result[0]['id']
@@ -131,7 +163,7 @@ class Cart:
                    FROM carts
                    LEFT JOIN products_in_carts ON carts.id = products_in_carts.cart_id
                    LEFT JOIN products ON products_in_carts.product_id = products.id
-                   WHERE carts.user_id = %(user_id)s AND carts.isPaid = 'false'
+                   WHERE carts.user_id = %(user_id)s AND carts.isPaid = False
                    GROUP BY carts.id;"""
         results = connectToMySQL(cls.db).query_db(query, data)
         if results == ():
