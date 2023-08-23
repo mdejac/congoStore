@@ -215,20 +215,20 @@ class User:
                 errors['first_name'] = []
             errors['first_name'].append('First name cannot contain numbers')
             is_valid = False
-        if len(data['first_name']) < 3:
+        if len(data['first_name']) < 1:
             if 'first_name' not in errors:
                 errors['first_name'] = []
-            errors['first_name'].append('First name must be at least 3 characters long')
+            errors['first_name'].append('First name must be at least 1 character long')
             is_valid = False
-        if not data['last_name'].replace(' ','').isalpha(): # and len(data['last_name']):
+        if not data['last_name'].replace(' ','').isalpha():
             if 'last_name' not in errors:
                 errors['last_name'] = []
             errors['last_name'].append('Last name cannot contain numbers')  
             is_valid = False      
-        if len(data['last_name']) < 3:
+        if len(data['last_name']) < 1:
             if 'last_name' not in errors:
                 errors['last_name'] = []
-            errors['last_name'].append('Last name must be at least 3 characters long')
+            errors['last_name'].append('Last name must be at least 1 character long')
             is_valid = False
         if len(data['address']) < 10:
             errors['address'] = []

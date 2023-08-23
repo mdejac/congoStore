@@ -15,7 +15,7 @@
             <div class="d-flex justify-content-between">
               <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
               <div class="card-item-price">
-                <p class="text-end">{{ product.price }}</p>
+                <p class="text-end">{{ "$%.2f"|format(product.price)  }}</p>
               </div>
             </div>
             <div class="card-body">
@@ -41,7 +41,7 @@
             <div class="d-flex justify-content-between">
               <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
               <div class="card-item-price">
-                <p class="text-end">{{ product.price }}</p>
+                <p class="text-end">{{ "$%.2f"|format(product.price)  }}</p>
               </div>
             </div>
             <div class="card-body">
@@ -68,7 +68,7 @@
             <div class="d-flex justify-content-between">
               <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
               <div class="card-item-price">
-                <p class="text-end">{{ product.price }}</p>
+                <p class="text-end">{{ "$%.2f"|format(product.price)  }}</p>
               </div>
             </div>
             <div class="card-body">

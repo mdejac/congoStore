@@ -10,6 +10,7 @@ class Cart:
         self.id = data['id']
         self.user_id = data['user_id']
         self.isPaid = data['isPaid']
+        self.total = 0.00
         self.created_at = data['created_at']
         self.updated_at = data['updated_at']
         self.products_in_cart = []
@@ -51,17 +52,17 @@ class Cart:
     def view_cart_by_user_id(cls, user_id):
         data = {'user_id': user_id}
         query = """SELECT carts.*,
-                   GROUP_CONCAT(products.id SEPARATOR ',') AS product_ids,
-                   GROUP_CONCAT(products.user_id SEPARATOR ',') AS product_user_ids,
-                   GROUP_CONCAT(products.name SEPARATOR ',') AS product_names,
-                   GROUP_CONCAT(products.description SEPARATOR ',') AS product_descriptions,
-                   GROUP_CONCAT(products.category SEPARATOR ',') AS product_categories,
-                   GROUP_CONCAT(products.quantity SEPARATOR ',') AS product_quantities,
-                   GROUP_CONCAT(products_in_carts.quantity_to_purchase SEPARATOR ',') AS product_quantities_in_cart,
-                   GROUP_CONCAT(products.price SEPARATOR ',') AS product_prices,
-                   GROUP_CONCAT(products.img_url SEPARATOR ',') AS product_img_urls,
-                   GROUP_CONCAT(products.created_at SEPARATOR ',') AS product_created_ats,
-                   GROUP_CONCAT(products.updated_at SEPARATOR ',') AS product_updated_ats
+                   GROUP_CONCAT(products.id SEPARATOR '^') AS product_ids,
+                   GROUP_CONCAT(products.user_id SEPARATOR '^') AS product_user_ids,
+                   GROUP_CONCAT(products.name SEPARATOR '^') AS product_names,
+                   GROUP_CONCAT(products.description SEPARATOR '^') AS product_descriptions,
+                   GROUP_CONCAT(products.category SEPARATOR '^') AS product_categories,
+                   GROUP_CONCAT(products.quantity SEPARATOR '^') AS product_quantities,
+                   GROUP_CONCAT(products_in_carts.quantity_to_purchase SEPARATOR '^') AS product_quantities_in_cart,
+                   GROUP_CONCAT(products.price SEPARATOR '^') AS product_prices,
+                   GROUP_CONCAT(products.img_url SEPARATOR '^') AS product_img_urls,
+                   GROUP_CONCAT(products.created_at SEPARATOR '^') AS product_created_ats,
+                   GROUP_CONCAT(products.updated_at SEPARATOR '^') AS product_updated_ats
                    FROM carts
                    LEFT JOIN products_in_carts ON carts.id = products_in_carts.cart_id
                    LEFT JOIN products ON products_in_carts.product_id = products.id
@@ -72,17 +73,17 @@ class Cart:
             return []
 
         cart = cls(results[0])
-        product_ids = results[0]['product_ids'].split(',') if results[0]['product_ids'] else ''
-        product_user_ids = results[0]['product_user_ids'].split(',') if results[0]['product_user_ids'] else ''
-        product_names = results[0]['product_names'].split(',') if results[0]['product_names'] else ''
-        product_descriptions = results[0]['product_descriptions'].split(',') if results[0]['product_descriptions'] else ''
-        product_categories = results[0]['product_categories'].split(',') if results[0]['product_categories'] else ''
-        product_quantities = results[0]['product_quantities'].split(',') if results[0]['product_quantities'] else ''
-        product_quantities_in_cart = results[0]['product_quantities_in_cart'].split(',') if results[0]['product_quantities_in_cart'] else ''
-        product_prices = results[0]['product_prices'].split(',') if results[0]['product_prices'] else ''
-        product_img_urls = results[0]['product_img_urls'].split(',') if results[0]['product_img_urls'] else ''
-        product_created_ats = results[0]['product_created_ats'].split(',') if results[0]['product_created_ats'] else ''
-        product_updated_ats = results[0]['product_updated_ats'].split(',') if results[0]['product_updated_ats'] else ''
+        product_ids = results[0]['product_ids'].split('^') if results[0]['product_ids'] else ''
+        product_user_ids = results[0]['product_user_ids'].split('^') if results[0]['product_user_ids'] else ''
+        product_names = results[0]['product_names'].split('^') if results[0]['product_names'] else ''
+        product_descriptions = results[0]['product_descriptions'].split('^') if results[0]['product_descriptions'] else ''
+        product_categories = results[0]['product_categories'].split('^') if results[0]['product_categories'] else ''
+        product_quantities = results[0]['product_quantities'].split('^') if results[0]['product_quantities'] else ''
+        product_quantities_in_cart = results[0]['product_quantities_in_cart'].split('^') if results[0]['product_quantities_in_cart'] else ''
+        product_prices = results[0]['product_prices'].split('^') if results[0]['product_prices'] else ''
+        product_img_urls = results[0]['product_img_urls'].split('^') if results[0]['product_img_urls'] else ''
+        product_created_ats = results[0]['product_created_ats'].split('^') if results[0]['product_created_ats'] else ''
+        product_updated_ats = results[0]['product_updated_ats'].split('^') if results[0]['product_updated_ats'] else ''
         
         for i in range(len(product_ids)):
             product_data = {
@@ -91,19 +92,84 @@ class Cart:
                 'name': product_names[i],
                 'description': product_descriptions[i],
                 'category': product_categories[i],
-                'quantity': product_quantities[i],
-                'quantity_to_purchase': product_quantities_in_cart[i],
-                'price': product_prices[i],
+                'quantity': int(product_quantities[i]),
+                'quantity_to_purchase': int(product_quantities_in_cart[i]),
+                'price': float(product_prices[i]),
                 'img_url': product_img_urls[i],
                 'created_at': product_created_ats[i],
                 'updated_at': product_updated_ats[i],
             }
+            cart.total = cart.total + product_data['quantity_to_purchase'] * product_data['price']
             cart.products_in_cart.append(product.Product(product_data))
                
         return cart
     
+    @classmethod
+    def get_all_paid_carts_by_user_id(cls, user_id):
+        data = {'user_id': user_id}
+        query = """SELECT carts.*,
+                   GROUP_CONCAT(products.id SEPARATOR '^') AS product_ids,
+                   GROUP_CONCAT(products.user_id SEPARATOR '^') AS product_user_ids,
+                   GROUP_CONCAT(products.name SEPARATOR '^') AS product_names,
+                   GROUP_CONCAT(products.description SEPARATOR '^') AS product_descriptions,
+                   GROUP_CONCAT(products.category SEPARATOR '^') AS product_categories,
+                   GROUP_CONCAT(products.quantity SEPARATOR '^') AS product_quantities,
+                   GROUP_CONCAT(products_in_carts.quantity_to_purchase SEPARATOR '^') AS product_quantities_in_cart,
+                   GROUP_CONCAT(products.price SEPARATOR '^') AS product_prices,
+                   GROUP_CONCAT(products.img_url SEPARATOR '^') AS product_img_urls,
+                   GROUP_CONCAT(products.created_at SEPARATOR '^') AS product_created_ats,
+                   GROUP_CONCAT(products.updated_at SEPARATOR '^') AS product_updated_ats
+                   FROM carts
+                   LEFT JOIN products_in_carts ON carts.id = products_in_carts.cart_id
+                   LEFT JOIN products ON products_in_carts.product_id = products.id
+                   WHERE carts.user_id = %(user_id)s AND carts.isPaid = True
+                   GROUP BY carts.id;"""
+        results = connectToMySQL(cls.db).query_db(query, data)
+        all_carts = []
+        for result in results:
+            one_cart = cls(result)
+            product_ids = result['product_ids'].split('^') if result['product_ids'] else ''
+            product_user_ids = result['product_user_ids'].split('^') if result['product_user_ids'] else ''
+            product_names = result['product_names'].split('^') if result['product_names'] else ''
+            product_descriptions = result['product_descriptions'].split('^') if result['product_descriptions'] else ''
+            product_categories = result['product_categories'].split('^') if result['product_categories'] else ''
+            product_quantities = result['product_quantities'].split('^') if result['product_quantities'] else ''
+            product_quantities_in_cart = result['product_quantities_in_cart'].split('^') if result['product_quantities_in_cart'] else ''
+            product_prices = result['product_prices'].split('^') if result['product_prices'] else ''
+            product_img_urls = result['product_img_urls'].split('^') if result['product_img_urls'] else ''
+            product_created_ats = result['product_created_ats'].split('^') if result['product_created_ats'] else ''
+            product_updated_ats = result['product_updated_ats'].split('^') if result['product_updated_ats'] else ''
+            
+            for i in range(len(product_ids)):
+                product_data = {
+                    'id': product_ids[i],
+                    'user_id': product_user_ids[i],
+                    'name': product_names[i],
+                    'description': product_descriptions[i],
+                    'category': product_categories[i],
+                    'quantity': int(product_quantities[i]),
+                    'quantity_to_purchase': int(product_quantities_in_cart[i]),
+                    'price': float(product_prices[i]),
+                    'img_url': product_img_urls[i],
+                    'created_at': product_created_ats[i],
+                    'updated_at': product_updated_ats[i],
+                }
+                one_cart.total = one_cart.total + product_data['quantity_to_purchase'] * product_data['price']
+                one_cart.products_in_cart.append(product.Product(product_data))
+
+            all_carts.append(one_cart)
+        return all_carts
     
-    
+    @classmethod
+    def checkout_cart_for_user_id(cls,user_id):
+        current_cart = Cart.view_cart_by_user_id(user_id)
+        data = {
+            'cart_id': current_cart.id
+        }
+        set_isPaid_query = """UPDATE carts SET
+                            isPaid = True
+                            WHERE id = %(cart_id)s;"""
+        connectToMySQL(cls.db).query_db(set_isPaid_query, data)
     # API specific methods
     
     @classmethod
@@ -149,17 +215,17 @@ class Cart:
     def view_cart_by_user_id_api(cls, user_id):
         data = {'user_id': user_id}
         query = """SELECT carts.*,
-                   GROUP_CONCAT(products.id SEPARATOR ',') AS product_ids,
-                   GROUP_CONCAT(products.user_id SEPARATOR ',') AS product_user_ids,
-                   GROUP_CONCAT(products.name SEPARATOR ',') AS product_names,
-                   GROUP_CONCAT(products.description SEPARATOR ',') AS product_descriptions,
-                   GROUP_CONCAT(products.category SEPARATOR ',') AS product_categories,
-                   GROUP_CONCAT(products.quantity SEPARATOR ',') AS product_quantities,
-                   GROUP_CONCAT(products_in_carts.quantity_to_purchase SEPARATOR ',') AS product_quantities_in_cart,
-                   GROUP_CONCAT(products.price SEPARATOR ',') AS product_prices,
-                   GROUP_CONCAT(products.img_url SEPARATOR ',') AS product_img_urls,
-                   GROUP_CONCAT(products.created_at SEPARATOR ',') AS product_created_ats,
-                   GROUP_CONCAT(products.updated_at SEPARATOR ',') AS product_updated_ats
+                   GROUP_CONCAT(products.id SEPARATOR '^') AS product_ids,
+                   GROUP_CONCAT(products.user_id SEPARATOR '^') AS product_user_ids,
+                   GROUP_CONCAT(products.name SEPARATOR '^') AS product_names,
+                   GROUP_CONCAT(products.description SEPARATOR '^') AS product_descriptions,
+                   GROUP_CONCAT(products.category SEPARATOR '^') AS product_categories,
+                   GROUP_CONCAT(products.quantity SEPARATOR '^') AS product_quantities,
+                   GROUP_CONCAT(products_in_carts.quantity_to_purchase SEPARATOR '^') AS product_quantities_in_cart,
+                   GROUP_CONCAT(products.price SEPARATOR '^') AS product_prices,
+                   GROUP_CONCAT(products.img_url SEPARATOR '^') AS product_img_urls,
+                   GROUP_CONCAT(products.created_at SEPARATOR '^') AS product_created_ats,
+                   GROUP_CONCAT(products.updated_at SEPARATOR '^') AS product_updated_ats
                    FROM carts
                    LEFT JOIN products_in_carts ON carts.id = products_in_carts.cart_id
                    LEFT JOIN products ON products_in_carts.product_id = products.id
@@ -170,17 +236,17 @@ class Cart:
             return {'message' : 'Request error', 'errors' : ['Cart does not exist']}
 
         cart = cls(results[0])
-        product_ids = results[0]['product_ids'].split(',') if results[0]['product_ids'] else ''
-        product_user_ids = results[0]['product_user_ids'].split(',') if results[0]['product_user_ids'] else ''
-        product_names = results[0]['product_names'].split(',') if results[0]['product_names'] else ''
-        product_descriptions = results[0]['product_descriptions'].split(',') if results[0]['product_descriptions'] else ''
-        product_categories = results[0]['product_categories'].split(',') if results[0]['product_categories'] else ''
-        product_quantities = results[0]['product_quantities'].split(',') if results[0]['product_quantities'] else ''
-        product_quantities_in_cart = results[0]['product_quantities_in_cart'].split(',') if results[0]['product_quantities_in_cart'] else ''
-        product_prices = results[0]['product_prices'].split(',') if results[0]['product_prices'] else ''
-        product_img_urls = results[0]['product_img_urls'].split(',') if results[0]['product_img_urls'] else ''
-        product_created_ats = results[0]['product_created_ats'].split(',') if results[0]['product_created_ats'] else ''
-        product_updated_ats = results[0]['product_updated_ats'].split(',') if results[0]['product_updated_ats'] else ''
+        product_ids = results[0]['product_ids'].split('^') if results[0]['product_ids'] else ''
+        product_user_ids = results[0]['product_user_ids'].split('^') if results[0]['product_user_ids'] else ''
+        product_names = results[0]['product_names'].split('^') if results[0]['product_names'] else ''
+        product_descriptions = results[0]['product_descriptions'].split('^') if results[0]['product_descriptions'] else ''
+        product_categories = results[0]['product_categories'].split('^') if results[0]['product_categories'] else ''
+        product_quantities = results[0]['product_quantities'].split('^') if results[0]['product_quantities'] else ''
+        product_quantities_in_cart = results[0]['product_quantities_in_cart'].split('^') if results[0]['product_quantities_in_cart'] else ''
+        product_prices = results[0]['product_prices'].split('^') if results[0]['product_prices'] else ''
+        product_img_urls = results[0]['product_img_urls'].split('^') if results[0]['product_img_urls'] else ''
+        product_created_ats = results[0]['product_created_ats'].split('^') if results[0]['product_created_ats'] else ''
+        product_updated_ats = results[0]['product_updated_ats'].split('^') if results[0]['product_updated_ats'] else ''
         
         for i in range(len(product_ids)):
             product_data = {
@@ -189,13 +255,14 @@ class Cart:
                 'name': product_names[i],
                 'description': product_descriptions[i],
                 'category': product_categories[i],
-                'quantity': product_quantities[i],
-                'quantity_to_purchase': product_quantities_in_cart[i],
-                'price': product_prices[i],
+                'quantity': int(product_quantities[i]),
+                'quantity_to_purchase': int(product_quantities_in_cart[i]),
+                'price': float(product_prices[i]),
                 'img_url': product_img_urls[i],
                 'created_at': product_created_ats[i],
                 'updated_at': product_updated_ats[i],
             }
+            cart.total = cart.total + product_data['quantity_to_purchase'] * product_data['price']
             cart.products_in_cart.append(product.Product(product_data))
                
         return cls.serialize_cart(cart)

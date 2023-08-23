@@ -12,8 +12,6 @@ def handle_page_request_error(e):
 
 
 def datetime_format(value, format='%B.%d.%Y'):
-    print('**************************************************')
-    print(value)
     value = datetime.strptime(value,'%Y-%m-%d %H:%M:%S')
     return value.strftime(format)
     pass

@@ -17,7 +17,7 @@
             <div class="d-flex justify-content-between">
               <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
               <div class="card-item-price">
-                <p class="text-end">{{ product.price }}</p>
+                <p class="text-end">{{ "$%.2f"|format(product.price)  }}</p>
               </div>
             </div>
             <div class="card-body">
@@ -33,6 +33,7 @@
     </div>
   </div>
   {% endif %}
+  
   {% if all_products_in_category%}
   <div class="scroll-wrapper">
     <h3>Category matches</h3>
@@ -44,7 +45,7 @@
             <div class="d-flex justify-content-between">
               <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
               <div class="card-item-price">
-                <p class="text-end">{{ product.price }}</p>
+                <p class="text-end">{{ "$%.2f"|format(product.price) }}</p>
               </div>
             </div>
             <div class="card-body">
@@ -60,6 +61,7 @@
     </div>
   </div>
   {% endif %}
+  
   {% if all_products_in_description%}
   <div class="scroll-wrapper">
     <h3>Description matches</h3>
@@ -71,7 +73,7 @@
             <div class="d-flex justify-content-between">
               <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
               <div class="card-item-price">
-                <p class="text-end">{{ product.price }}</p>
+                <p class="text-end">{{ "$%.2f"|format(product.price) }}</p>
               </div>
             </div>
             <div class="card-body">
@@ -83,11 +85,95 @@
           </div>
         {% endfor %}
       </div>
-      <button class="scroll-button next-button" onclick="scrollContainer('description', 'right')">&gt;</button>
+        <button class="scroll-button next-button" onclick="scrollContainer('description', 'right')">&gt;</button>
+      </div>
     </div>
+  {% endif %}
+
+  {% if all_products_in_related_category_1 %}
+    <div class="scroll-wrapper">
+      <h3>Related in {{related_categories[0]}}</h3>
+      <div class="scroll-controls">
+        <button class="scroll-button prev-button" onclick="scrollContainer('related_category_1', 'left')">&lt;</button>
+        <div class="scroll-container" id="scroll-container-related_category_1">
+          {% for product in all_products_in_related_category_1 %}
+            <div class="item pop-out-effect">
+              <div class="d-flex justify-content-between">
+                <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
+                <div class="card-item-price">
+                  <p class="text-end">{{ "$%.2f"|format(product.price) }}</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <a href="/products/view/{{ product.id }}">
+                  <h5 class="card-title">{{ product.name }}</h5>
+                </a>
+                <p class="card-text">{{ product.description }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="scroll-button next-button" onclick="scrollContainer('related_category_1', 'right')">&gt;</button>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if all_products_in_related_category_2 %}
+    <div class="scroll-wrapper">
+      <h3>Related in {{related_categories[1]}}</h3>
+      <div class="scroll-controls">
+        <button class="scroll-button prev-button" onclick="scrollContainer('related_category_2', 'left')">&lt;</button>
+        <div class="scroll-container" id="scroll-container-related_category_2">
+          {% for product in all_products_in_related_category_2 %}
+            <div class="item pop-out-effect">
+              <div class="d-flex justify-content-between">
+                <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
+                <div class="card-item-price">
+                  <p class="text-end">{{ "$%.2f"|format(product.price) }}</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <a href="/products/view/{{ product.id }}">
+                  <h5 class="card-title">{{ product.name }}</h5>
+                </a>
+                <p class="card-text">{{ product.description }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="scroll-button next-button" onclick="scrollContainer('related_category_2', 'right')">&gt;</button>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if all_products_in_related_category_3 %}
+    <div class="scroll-wrapper">
+      <h3>Related in {{related_categories[2]}}</h3>
+      <div class="scroll-controls">
+        <button class="scroll-button prev-button" onclick="scrollContainer('related_category_3', 'left')">&lt;</button>
+        <div class="scroll-container" id="scroll-container-related_category_3">
+          {% for product in all_products_in_related_category_2 %}
+            <div class="item pop-out-effect">
+              <div class="d-flex justify-content-between">
+                <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
+                <div class="card-item-price">
+                  <p class="text-end">{{ "$%.2f"|format(product.price) }}</p>
+                </div>
+              </div>
+              <div class="card-body">
+                <a href="/products/view/{{ product.id }}">
+                  <h5 class="card-title">{{ product.name }}</h5>
+                </a>
+                <p class="card-text">{{ product.description }}</p>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        <button class="scroll-button next-button" onclick="scrollContainer('related_category_3', 'right')">&gt;</button>
+      </div>
+    </div>
+    {% endif %}
   </div>
-</div>
-{% endif %}
 <script>
   function scrollContainer(section, direction) {
     const container = document.getElementById(`scroll-container-${section}`);

@@ -42,20 +42,20 @@ class Product:
     @classmethod
     def get_all_products(cls):
         query = """SELECT products.*, users.*,
-                   GROUP_CONCAT(reviews.id SEPARATOR ',') AS review_by_ids,
-                   GROUP_CONCAT(review_users.id SEPARATOR ',') AS review_by_user_ids,
-                   GROUP_CONCAT(review_users.first_name SEPARATOR ',') AS review_by_first_names,
-                   GROUP_CONCAT(review_users.last_name SEPARATOR ',') AS review_by_last_names,
-                   GROUP_CONCAT(review_users.address SEPARATOR ',') AS review_by_addresses,
-                   GROUP_CONCAT(review_users.email SEPARATOR ',') AS review_by_emails,
-                   GROUP_CONCAT(review_users.password SEPARATOR ',') AS review_by_passwords,
-                   GROUP_CONCAT(review_users.created_at SEPARATOR ',') AS review_by_user_created_ats,
-                   GROUP_CONCAT(review_users.updated_at SEPARATOR ',') AS review_by_user_updated_ats,
-                   GROUP_CONCAT(reviews.content SEPARATOR ',') AS review_by_contents,
-                   GROUP_CONCAT(reviews.rating SEPARATOR ',') AS review_by_ratings,
-                   GROUP_CONCAT(reviews.product_id SEPARATOR ',') AS review_by_product_ids,
-                   GROUP_CONCAT(reviews.created_at SEPARATOR ',') AS review_by_created_ats,
-                   GROUP_CONCAT(reviews.updated_at SEPARATOR ',') AS review_by_updated_ats
+                   GROUP_CONCAT(reviews.id SEPARATOR '^') AS review_by_ids,
+                   GROUP_CONCAT(review_users.id SEPARATOR '^') AS review_by_user_ids,
+                   GROUP_CONCAT(review_users.first_name SEPARATOR '^') AS review_by_first_names,
+                   GROUP_CONCAT(review_users.last_name SEPARATOR '^') AS review_by_last_names,
+                   GROUP_CONCAT(review_users.address SEPARATOR '^') AS review_by_addresses,
+                   GROUP_CONCAT(review_users.email SEPARATOR '^') AS review_by_emails,
+                   GROUP_CONCAT(review_users.password SEPARATOR '^') AS review_by_passwords,
+                   GROUP_CONCAT(review_users.created_at SEPARATOR '^') AS review_by_user_created_ats,
+                   GROUP_CONCAT(review_users.updated_at SEPARATOR '^') AS review_by_user_updated_ats,
+                   GROUP_CONCAT(reviews.content SEPARATOR '^') AS review_by_contents,
+                   GROUP_CONCAT(reviews.rating SEPARATOR '^') AS review_by_ratings,
+                   GROUP_CONCAT(reviews.product_id SEPARATOR '^') AS review_by_product_ids,
+                   GROUP_CONCAT(reviews.created_at SEPARATOR '^') AS review_by_created_ats,
+                   GROUP_CONCAT(reviews.updated_at SEPARATOR '^') AS review_by_updated_ats
                    FROM products
                    LEFT JOIN users ON products.user_id = users.id
                    LEFT JOIN reviews ON products.id = reviews.product_id
@@ -77,20 +77,20 @@ class Product:
             }
             one_product.creator = user.User(one_product_creator_info)
 
-            review_by_ids = result['review_by_ids'].split(',') if result['review_by_ids'] else ''
-            review_by_user_ids = result['review_by_user_ids'].split(',') if result['review_by_user_ids'] else ''
-            review_by_first_names = result['review_by_first_names'].split(',') if result['review_by_first_names'] else ''
-            review_by_last_names = result['review_by_last_names'].split(',') if result['review_by_last_names'] else ''
-            review_by_addresses = result['review_by_addresses'].split(',') if result['review_by_addresses'] else ''
-            review_by_emails = result['review_by_emails'].split(',') if result['review_by_emails'] else ''
-            review_by_passwords = result['review_by_passwords'].split(',') if result['review_by_passwords'] else ''
-            review_by_user_created_ats = result['review_by_user_created_ats'].split(',') if result['review_by_user_created_ats'] else ''
-            review_by_user_updated_ats = result['review_by_user_updated_ats'].split(',') if result['review_by_user_updated_ats'] else ''
-            review_by_product_ids = result['review_by_product_ids'].split(',') if result['review_by_product_ids'] else ''
-            review_by_contents = result['review_by_contents'].split(',') if result['review_by_contents'] else ''
-            review_by_ratings = result['review_by_ratings'].split(',') if result['review_by_ratings'] else ''
-            review_by_created_ats = result['review_by_created_ats'].split(',') if result['review_by_created_ats'] else ''
-            review_by_updated_ats = result['review_by_updated_ats'].split(',') if result['review_by_updated_ats'] else ''
+            review_by_ids = result['review_by_ids'].split('^') if result['review_by_ids'] else ''
+            review_by_user_ids = result['review_by_user_ids'].split('^') if result['review_by_user_ids'] else ''
+            review_by_first_names = result['review_by_first_names'].split('^') if result['review_by_first_names'] else ''
+            review_by_last_names = result['review_by_last_names'].split('^') if result['review_by_last_names'] else ''
+            review_by_addresses = result['review_by_addresses'].split('^') if result['review_by_addresses'] else ''
+            review_by_emails = result['review_by_emails'].split('^') if result['review_by_emails'] else ''
+            review_by_passwords = result['review_by_passwords'].split('^') if result['review_by_passwords'] else ''
+            review_by_user_created_ats = result['review_by_user_created_ats'].split('^') if result['review_by_user_created_ats'] else ''
+            review_by_user_updated_ats = result['review_by_user_updated_ats'].split('^') if result['review_by_user_updated_ats'] else ''
+            review_by_product_ids = result['review_by_product_ids'].split('^') if result['review_by_product_ids'] else ''
+            review_by_contents = result['review_by_contents'].split('^') if result['review_by_contents'] else ''
+            review_by_ratings = result['review_by_ratings'].split('^') if result['review_by_ratings'] else ''
+            review_by_created_ats = result['review_by_created_ats'].split('^') if result['review_by_created_ats'] else ''
+            review_by_updated_ats = result['review_by_updated_ats'].split('^') if result['review_by_updated_ats'] else ''
 
             for i in range(len(review_by_ids)):
                 review_creator_data = {
@@ -123,20 +123,20 @@ class Product:
     @classmethod
     def get_all_products_by_user_id(cls, user_id):
         query = """SELECT products.*, users.*,
-                   GROUP_CONCAT(reviews.id SEPARATOR ',') AS review_by_ids,
-                   GROUP_CONCAT(review_users.id SEPARATOR ',') AS review_by_user_ids,
-                   GROUP_CONCAT(review_users.first_name SEPARATOR ',') AS review_by_first_names,
-                   GROUP_CONCAT(review_users.last_name SEPARATOR ',') AS review_by_last_names,
-                   GROUP_CONCAT(review_users.address SEPARATOR ',') AS review_by_addresses,
-                   GROUP_CONCAT(review_users.email SEPARATOR ',') AS review_by_emails,
-                   GROUP_CONCAT(review_users.password SEPARATOR ',') AS review_by_passwords,
-                   GROUP_CONCAT(review_users.created_at SEPARATOR ',') AS review_by_user_created_ats,
-                   GROUP_CONCAT(review_users.updated_at SEPARATOR ',') AS review_by_user_updated_ats,
-                   GROUP_CONCAT(reviews.content SEPARATOR ',') AS review_by_contents,
-                   GROUP_CONCAT(reviews.rating SEPARATOR ',') AS review_by_ratings,
-                   GROUP_CONCAT(reviews.product_id SEPARATOR ',') AS review_by_product_ids,
-                   GROUP_CONCAT(reviews.created_at SEPARATOR ',') AS review_by_created_ats,
-                   GROUP_CONCAT(reviews.updated_at SEPARATOR ',') AS review_by_updated_ats
+                   GROUP_CONCAT(reviews.id SEPARATOR '^') AS review_by_ids,
+                   GROUP_CONCAT(review_users.id SEPARATOR '^') AS review_by_user_ids,
+                   GROUP_CONCAT(review_users.first_name SEPARATOR '^') AS review_by_first_names,
+                   GROUP_CONCAT(review_users.last_name SEPARATOR '^') AS review_by_last_names,
+                   GROUP_CONCAT(review_users.address SEPARATOR '^') AS review_by_addresses,
+                   GROUP_CONCAT(review_users.email SEPARATOR '^') AS review_by_emails,
+                   GROUP_CONCAT(review_users.password SEPARATOR '^') AS review_by_passwords,
+                   GROUP_CONCAT(review_users.created_at SEPARATOR '^') AS review_by_user_created_ats,
+                   GROUP_CONCAT(review_users.updated_at SEPARATOR '^') AS review_by_user_updated_ats,
+                   GROUP_CONCAT(reviews.content SEPARATOR '^') AS review_by_contents,
+                   GROUP_CONCAT(reviews.rating SEPARATOR '^') AS review_by_ratings,
+                   GROUP_CONCAT(reviews.product_id SEPARATOR '^') AS review_by_product_ids,
+                   GROUP_CONCAT(reviews.created_at SEPARATOR '^') AS review_by_created_ats,
+                   GROUP_CONCAT(reviews.updated_at SEPARATOR '^') AS review_by_updated_ats
                    FROM products
                    LEFT JOIN users ON products.user_id = users.id
                    LEFT JOIN reviews ON products.id = reviews.product_id
@@ -159,20 +159,20 @@ class Product:
             }
             one_product.creator = user.User(one_product_creator_info)
 
-            review_by_ids = result['review_by_ids'].split(',') if result['review_by_ids'] else ''
-            review_by_user_ids = result['review_by_user_ids'].split(',') if result['review_by_user_ids'] else ''
-            review_by_first_names = result['review_by_first_names'].split(',') if result['review_by_first_names'] else ''
-            review_by_last_names = result['review_by_last_names'].split(',') if result['review_by_last_names'] else ''
-            review_by_addresses = result['review_by_addresses'].split(',') if result['review_by_addresses'] else ''
-            review_by_emails = result['review_by_emails'].split(',') if result['review_by_emails'] else ''
-            review_by_passwords = result['review_by_passwords'].split(',') if result['review_by_passwords'] else ''
-            review_by_user_created_ats = result['review_by_user_created_ats'].split(',') if result['review_by_user_created_ats'] else ''
-            review_by_user_updated_ats = result['review_by_user_updated_ats'].split(',') if result['review_by_user_updated_ats'] else ''
-            review_by_product_ids = result['review_by_product_ids'].split(',') if result['review_by_product_ids'] else ''
-            review_by_contents = result['review_by_contents'].split(',') if result['review_by_contents'] else ''
-            review_by_ratings = result['review_by_ratings'].split(',') if result['review_by_ratings'] else ''
-            review_by_created_ats = result['review_by_created_ats'].split(',') if result['review_by_created_ats'] else ''
-            review_by_updated_ats = result['review_by_updated_ats'].split(',') if result['review_by_updated_ats'] else ''
+            review_by_ids = result['review_by_ids'].split('^') if result['review_by_ids'] else ''
+            review_by_user_ids = result['review_by_user_ids'].split('^') if result['review_by_user_ids'] else ''
+            review_by_first_names = result['review_by_first_names'].split('^') if result['review_by_first_names'] else ''
+            review_by_last_names = result['review_by_last_names'].split('^') if result['review_by_last_names'] else ''
+            review_by_addresses = result['review_by_addresses'].split('^') if result['review_by_addresses'] else ''
+            review_by_emails = result['review_by_emails'].split('^') if result['review_by_emails'] else ''
+            review_by_passwords = result['review_by_passwords'].split('^') if result['review_by_passwords'] else ''
+            review_by_user_created_ats = result['review_by_user_created_ats'].split('^') if result['review_by_user_created_ats'] else ''
+            review_by_user_updated_ats = result['review_by_user_updated_ats'].split('^') if result['review_by_user_updated_ats'] else ''
+            review_by_product_ids = result['review_by_product_ids'].split('^') if result['review_by_product_ids'] else ''
+            review_by_contents = result['review_by_contents'].split('^') if result['review_by_contents'] else ''
+            review_by_ratings = result['review_by_ratings'].split('^') if result['review_by_ratings'] else ''
+            review_by_created_ats = result['review_by_created_ats'].split('^') if result['review_by_created_ats'] else ''
+            review_by_updated_ats = result['review_by_updated_ats'].split('^') if result['review_by_updated_ats'] else ''
 
             for i in range(len(review_by_ids)):
                 review_creator_data = {
@@ -205,20 +205,20 @@ class Product:
     @classmethod
     def get_all_products_by_category(cls, category):
         query = """SELECT products.*, users.*,
-                   GROUP_CONCAT(reviews.id SEPARATOR ',') AS review_by_ids,
-                   GROUP_CONCAT(review_users.id SEPARATOR ',') AS review_by_user_ids,
-                   GROUP_CONCAT(review_users.first_name SEPARATOR ',') AS review_by_first_names,
-                   GROUP_CONCAT(review_users.last_name SEPARATOR ',') AS review_by_last_names,
-                   GROUP_CONCAT(review_users.address SEPARATOR ',') AS review_by_addresses,
-                   GROUP_CONCAT(review_users.email SEPARATOR ',') AS review_by_emails,
-                   GROUP_CONCAT(review_users.password SEPARATOR ',') AS review_by_passwords,
-                   GROUP_CONCAT(review_users.created_at SEPARATOR ',') AS review_by_user_created_ats,
-                   GROUP_CONCAT(review_users.updated_at SEPARATOR ',') AS review_by_user_updated_ats,
-                   GROUP_CONCAT(reviews.content SEPARATOR ',') AS review_by_contents,
-                   GROUP_CONCAT(reviews.rating SEPARATOR ',') AS review_by_ratings,
-                   GROUP_CONCAT(reviews.product_id SEPARATOR ',') AS review_by_product_ids,
-                   GROUP_CONCAT(reviews.created_at SEPARATOR ',') AS review_by_created_ats,
-                   GROUP_CONCAT(reviews.updated_at SEPARATOR ',') AS review_by_updated_ats
+                   GROUP_CONCAT(reviews.id SEPARATOR '^') AS review_by_ids,
+                   GROUP_CONCAT(review_users.id SEPARATOR '^') AS review_by_user_ids,
+                   GROUP_CONCAT(review_users.first_name SEPARATOR '^') AS review_by_first_names,
+                   GROUP_CONCAT(review_users.last_name SEPARATOR '^') AS review_by_last_names,
+                   GROUP_CONCAT(review_users.address SEPARATOR '^') AS review_by_addresses,
+                   GROUP_CONCAT(review_users.email SEPARATOR '^') AS review_by_emails,
+                   GROUP_CONCAT(review_users.password SEPARATOR '^') AS review_by_passwords,
+                   GROUP_CONCAT(review_users.created_at SEPARATOR '^') AS review_by_user_created_ats,
+                   GROUP_CONCAT(review_users.updated_at SEPARATOR '^') AS review_by_user_updated_ats,
+                   GROUP_CONCAT(reviews.content SEPARATOR '^') AS review_by_contents,
+                   GROUP_CONCAT(reviews.rating SEPARATOR '^') AS review_by_ratings,
+                   GROUP_CONCAT(reviews.product_id SEPARATOR '^') AS review_by_product_ids,
+                   GROUP_CONCAT(reviews.created_at SEPARATOR '^') AS review_by_created_ats,
+                   GROUP_CONCAT(reviews.updated_at SEPARATOR '^') AS review_by_updated_ats
                    FROM products
                    LEFT JOIN users ON products.user_id = users.id
                    LEFT JOIN reviews ON products.id = reviews.product_id
@@ -241,20 +241,20 @@ class Product:
             }
             one_product.creator = user.User(one_product_creator_info)
 
-            review_by_ids = result['review_by_ids'].split(',') if result['review_by_ids'] else ''
-            review_by_user_ids = result['review_by_user_ids'].split(',') if result['review_by_user_ids'] else ''
-            review_by_first_names = result['review_by_first_names'].split(',') if result['review_by_first_names'] else ''
-            review_by_last_names = result['review_by_last_names'].split(',') if result['review_by_last_names'] else ''
-            review_by_addresses = result['review_by_addresses'].split(',') if result['review_by_addresses'] else ''
-            review_by_emails = result['review_by_emails'].split(',') if result['review_by_emails'] else ''
-            review_by_passwords = result['review_by_passwords'].split(',') if result['review_by_passwords'] else ''
-            review_by_user_created_ats = result['review_by_user_created_ats'].split(',') if result['review_by_user_created_ats'] else ''
-            review_by_user_updated_ats = result['review_by_user_updated_ats'].split(',') if result['review_by_user_updated_ats'] else ''
-            review_by_product_ids = result['review_by_product_ids'].split(',') if result['review_by_product_ids'] else ''
-            review_by_contents = result['review_by_contents'].split(',') if result['review_by_contents'] else ''
-            review_by_ratings = result['review_by_ratings'].split(',') if result['review_by_ratings'] else ''
-            review_by_created_ats = result['review_by_created_ats'].split(',') if result['review_by_created_ats'] else ''
-            review_by_updated_ats = result['review_by_updated_ats'].split(',') if result['review_by_updated_ats'] else ''
+            review_by_ids = result['review_by_ids'].split('^') if result['review_by_ids'] else ''
+            review_by_user_ids = result['review_by_user_ids'].split('^') if result['review_by_user_ids'] else ''
+            review_by_first_names = result['review_by_first_names'].split('^') if result['review_by_first_names'] else ''
+            review_by_last_names = result['review_by_last_names'].split('^') if result['review_by_last_names'] else ''
+            review_by_addresses = result['review_by_addresses'].split('^') if result['review_by_addresses'] else ''
+            review_by_emails = result['review_by_emails'].split('^') if result['review_by_emails'] else ''
+            review_by_passwords = result['review_by_passwords'].split('^') if result['review_by_passwords'] else ''
+            review_by_user_created_ats = result['review_by_user_created_ats'].split('^') if result['review_by_user_created_ats'] else ''
+            review_by_user_updated_ats = result['review_by_user_updated_ats'].split('^') if result['review_by_user_updated_ats'] else ''
+            review_by_product_ids = result['review_by_product_ids'].split('^') if result['review_by_product_ids'] else ''
+            review_by_contents = result['review_by_contents'].split('^') if result['review_by_contents'] else ''
+            review_by_ratings = result['review_by_ratings'].split('^') if result['review_by_ratings'] else ''
+            review_by_created_ats = result['review_by_created_ats'].split('^') if result['review_by_created_ats'] else ''
+            review_by_updated_ats = result['review_by_updated_ats'].split('^') if result['review_by_updated_ats'] else ''
 
             for i in range(len(review_by_ids)):
                 review_creator_data = {
@@ -287,20 +287,20 @@ class Product:
     @classmethod
     def get_all_products_by_description_like(cls, search_term):
         query = """SELECT products.*, users.*,
-                   GROUP_CONCAT(reviews.id SEPARATOR ',') AS review_by_ids,
-                   GROUP_CONCAT(review_users.id SEPARATOR ',') AS review_by_user_ids,
-                   GROUP_CONCAT(review_users.first_name SEPARATOR ',') AS review_by_first_names,
-                   GROUP_CONCAT(review_users.last_name SEPARATOR ',') AS review_by_last_names,
-                   GROUP_CONCAT(review_users.address SEPARATOR ',') AS review_by_addresses,
-                   GROUP_CONCAT(review_users.email SEPARATOR ',') AS review_by_emails,
-                   GROUP_CONCAT(review_users.password SEPARATOR ',') AS review_by_passwords,
-                   GROUP_CONCAT(review_users.created_at SEPARATOR ',') AS review_by_user_created_ats,
-                   GROUP_CONCAT(review_users.updated_at SEPARATOR ',') AS review_by_user_updated_ats,
-                   GROUP_CONCAT(reviews.content SEPARATOR ',') AS review_by_contents,
-                   GROUP_CONCAT(reviews.rating SEPARATOR ',') AS review_by_ratings,
-                   GROUP_CONCAT(reviews.product_id SEPARATOR ',') AS review_by_product_ids,
-                   GROUP_CONCAT(reviews.created_at SEPARATOR ',') AS review_by_created_ats,
-                   GROUP_CONCAT(reviews.updated_at SEPARATOR ',') AS review_by_updated_ats
+                   GROUP_CONCAT(reviews.id SEPARATOR '^') AS review_by_ids,
+                   GROUP_CONCAT(review_users.id SEPARATOR '^') AS review_by_user_ids,
+                   GROUP_CONCAT(review_users.first_name SEPARATOR '^') AS review_by_first_names,
+                   GROUP_CONCAT(review_users.last_name SEPARATOR '^') AS review_by_last_names,
+                   GROUP_CONCAT(review_users.address SEPARATOR '^') AS review_by_addresses,
+                   GROUP_CONCAT(review_users.email SEPARATOR '^') AS review_by_emails,
+                   GROUP_CONCAT(review_users.password SEPARATOR '^') AS review_by_passwords,
+                   GROUP_CONCAT(review_users.created_at SEPARATOR '^') AS review_by_user_created_ats,
+                   GROUP_CONCAT(review_users.updated_at SEPARATOR '^') AS review_by_user_updated_ats,
+                   GROUP_CONCAT(reviews.content SEPARATOR '^') AS review_by_contents,
+                   GROUP_CONCAT(reviews.rating SEPARATOR '^') AS review_by_ratings,
+                   GROUP_CONCAT(reviews.product_id SEPARATOR '^') AS review_by_product_ids,
+                   GROUP_CONCAT(reviews.created_at SEPARATOR '^') AS review_by_created_ats,
+                   GROUP_CONCAT(reviews.updated_at SEPARATOR '^') AS review_by_updated_ats
                    FROM products
                    LEFT JOIN users ON products.user_id = users.id
                    LEFT JOIN reviews ON products.id = reviews.product_id
@@ -323,20 +323,20 @@ class Product:
             }
             one_product.creator = user.User(one_product_creator_info)
 
-            review_by_ids = result['review_by_ids'].split(',') if result['review_by_ids'] else ''
-            review_by_user_ids = result['review_by_user_ids'].split(',') if result['review_by_user_ids'] else ''
-            review_by_first_names = result['review_by_first_names'].split(',') if result['review_by_first_names'] else ''
-            review_by_last_names = result['review_by_last_names'].split(',') if result['review_by_last_names'] else ''
-            review_by_addresses = result['review_by_addresses'].split(',') if result['review_by_addresses'] else ''
-            review_by_emails = result['review_by_emails'].split(',') if result['review_by_emails'] else ''
-            review_by_passwords = result['review_by_passwords'].split(',') if result['review_by_passwords'] else ''
-            review_by_user_created_ats = result['review_by_user_created_ats'].split(',') if result['review_by_user_created_ats'] else ''
-            review_by_user_updated_ats = result['review_by_user_updated_ats'].split(',') if result['review_by_user_updated_ats'] else ''
-            review_by_product_ids = result['review_by_product_ids'].split(',') if result['review_by_product_ids'] else ''
-            review_by_contents = result['review_by_contents'].split(',') if result['review_by_contents'] else ''
-            review_by_ratings = result['review_by_ratings'].split(',') if result['review_by_ratings'] else ''
-            review_by_created_ats = result['review_by_created_ats'].split(',') if result['review_by_created_ats'] else ''
-            review_by_updated_ats = result['review_by_updated_ats'].split(',') if result['review_by_updated_ats'] else ''
+            review_by_ids = result['review_by_ids'].split('^') if result['review_by_ids'] else ''
+            review_by_user_ids = result['review_by_user_ids'].split('^') if result['review_by_user_ids'] else ''
+            review_by_first_names = result['review_by_first_names'].split('^') if result['review_by_first_names'] else ''
+            review_by_last_names = result['review_by_last_names'].split('^') if result['review_by_last_names'] else ''
+            review_by_addresses = result['review_by_addresses'].split('^') if result['review_by_addresses'] else ''
+            review_by_emails = result['review_by_emails'].split('^') if result['review_by_emails'] else ''
+            review_by_passwords = result['review_by_passwords'].split('^') if result['review_by_passwords'] else ''
+            review_by_user_created_ats = result['review_by_user_created_ats'].split('^') if result['review_by_user_created_ats'] else ''
+            review_by_user_updated_ats = result['review_by_user_updated_ats'].split('^') if result['review_by_user_updated_ats'] else ''
+            review_by_product_ids = result['review_by_product_ids'].split('^') if result['review_by_product_ids'] else ''
+            review_by_contents = result['review_by_contents'].split('^') if result['review_by_contents'] else ''
+            review_by_ratings = result['review_by_ratings'].split('^') if result['review_by_ratings'] else ''
+            review_by_created_ats = result['review_by_created_ats'].split('^') if result['review_by_created_ats'] else ''
+            review_by_updated_ats = result['review_by_updated_ats'].split('^') if result['review_by_updated_ats'] else ''
 
             for i in range(len(review_by_ids)):
                 review_creator_data = {
@@ -369,20 +369,20 @@ class Product:
     @classmethod
     def get_all_products_by_name(cls, name):
         query = """SELECT products.*, users.*,
-                   GROUP_CONCAT(reviews.id SEPARATOR ',') AS review_by_ids,
-                   GROUP_CONCAT(review_users.id SEPARATOR ',') AS review_by_user_ids,
-                   GROUP_CONCAT(review_users.first_name SEPARATOR ',') AS review_by_first_names,
-                   GROUP_CONCAT(review_users.last_name SEPARATOR ',') AS review_by_last_names,
-                   GROUP_CONCAT(review_users.address SEPARATOR ',') AS review_by_addresses,
-                   GROUP_CONCAT(review_users.email SEPARATOR ',') AS review_by_emails,
-                   GROUP_CONCAT(review_users.password SEPARATOR ',') AS review_by_passwords,
-                   GROUP_CONCAT(review_users.created_at SEPARATOR ',') AS review_by_user_created_ats,
-                   GROUP_CONCAT(review_users.updated_at SEPARATOR ',') AS review_by_user_updated_ats,
-                   GROUP_CONCAT(reviews.content SEPARATOR ',') AS review_by_contents,
-                   GROUP_CONCAT(reviews.rating SEPARATOR ',') AS review_by_ratings,
-                   GROUP_CONCAT(reviews.product_id SEPARATOR ',') AS review_by_product_ids,
-                   GROUP_CONCAT(reviews.created_at SEPARATOR ',') AS review_by_created_ats,
-                   GROUP_CONCAT(reviews.updated_at SEPARATOR ',') AS review_by_updated_ats
+                   GROUP_CONCAT(reviews.id SEPARATOR '^') AS review_by_ids,
+                   GROUP_CONCAT(review_users.id SEPARATOR '^') AS review_by_user_ids,
+                   GROUP_CONCAT(review_users.first_name SEPARATOR '^') AS review_by_first_names,
+                   GROUP_CONCAT(review_users.last_name SEPARATOR '^') AS review_by_last_names,
+                   GROUP_CONCAT(review_users.address SEPARATOR '^') AS review_by_addresses,
+                   GROUP_CONCAT(review_users.email SEPARATOR '^') AS review_by_emails,
+                   GROUP_CONCAT(review_users.password SEPARATOR '^') AS review_by_passwords,
+                   GROUP_CONCAT(review_users.created_at SEPARATOR '^') AS review_by_user_created_ats,
+                   GROUP_CONCAT(review_users.updated_at SEPARATOR '^') AS review_by_user_updated_ats,
+                   GROUP_CONCAT(reviews.content SEPARATOR '^') AS review_by_contents,
+                   GROUP_CONCAT(reviews.rating SEPARATOR '^') AS review_by_ratings,
+                   GROUP_CONCAT(reviews.product_id SEPARATOR '^') AS review_by_product_ids,
+                   GROUP_CONCAT(reviews.created_at SEPARATOR '^') AS review_by_created_ats,
+                   GROUP_CONCAT(reviews.updated_at SEPARATOR '^') AS review_by_updated_ats
                    FROM products
                    LEFT JOIN users ON products.user_id = users.id
                    LEFT JOIN reviews ON products.id = reviews.product_id
@@ -405,20 +405,20 @@ class Product:
             }
             one_product.creator = user.User(one_product_creator_info)
 
-            review_by_ids = result['review_by_ids'].split(',') if result['review_by_ids'] else ''
-            review_by_user_ids = result['review_by_user_ids'].split(',') if result['review_by_user_ids'] else ''
-            review_by_first_names = result['review_by_first_names'].split(',') if result['review_by_first_names'] else ''
-            review_by_last_names = result['review_by_last_names'].split(',') if result['review_by_last_names'] else ''
-            review_by_addresses = result['review_by_addresses'].split(',') if result['review_by_addresses'] else ''
-            review_by_emails = result['review_by_emails'].split(',') if result['review_by_emails'] else ''
-            review_by_passwords = result['review_by_passwords'].split(',') if result['review_by_passwords'] else ''
-            review_by_user_created_ats = result['review_by_user_created_ats'].split(',') if result['review_by_user_created_ats'] else ''
-            review_by_user_updated_ats = result['review_by_user_updated_ats'].split(',') if result['review_by_user_updated_ats'] else ''
-            review_by_product_ids = result['review_by_product_ids'].split(',') if result['review_by_product_ids'] else ''
-            review_by_contents = result['review_by_contents'].split(',') if result['review_by_contents'] else ''
-            review_by_ratings = result['review_by_ratings'].split(',') if result['review_by_ratings'] else ''
-            review_by_created_ats = result['review_by_created_ats'].split(',') if result['review_by_created_ats'] else ''
-            review_by_updated_ats = result['review_by_updated_ats'].split(',') if result['review_by_updated_ats'] else ''
+            review_by_ids = result['review_by_ids'].split('^') if result['review_by_ids'] else ''
+            review_by_user_ids = result['review_by_user_ids'].split('^') if result['review_by_user_ids'] else ''
+            review_by_first_names = result['review_by_first_names'].split('^') if result['review_by_first_names'] else ''
+            review_by_last_names = result['review_by_last_names'].split('^') if result['review_by_last_names'] else ''
+            review_by_addresses = result['review_by_addresses'].split('^') if result['review_by_addresses'] else ''
+            review_by_emails = result['review_by_emails'].split('^') if result['review_by_emails'] else ''
+            review_by_passwords = result['review_by_passwords'].split('^') if result['review_by_passwords'] else ''
+            review_by_user_created_ats = result['review_by_user_created_ats'].split('^') if result['review_by_user_created_ats'] else ''
+            review_by_user_updated_ats = result['review_by_user_updated_ats'].split('^') if result['review_by_user_updated_ats'] else ''
+            review_by_product_ids = result['review_by_product_ids'].split('^') if result['review_by_product_ids'] else ''
+            review_by_contents = result['review_by_contents'].split('^') if result['review_by_contents'] else ''
+            review_by_ratings = result['review_by_ratings'].split('^') if result['review_by_ratings'] else ''
+            review_by_created_ats = result['review_by_created_ats'].split('^') if result['review_by_created_ats'] else ''
+            review_by_updated_ats = result['review_by_updated_ats'].split('^') if result['review_by_updated_ats'] else ''
 
             for i in range(len(review_by_ids)):
                 review_creator_data = {
@@ -451,20 +451,20 @@ class Product:
     @classmethod
     def get_product_by_id(cls, id):
         query = """SELECT products.*, users.*,
-                   GROUP_CONCAT(reviews.id SEPARATOR ',') AS review_by_ids,
-                   GROUP_CONCAT(review_users.id SEPARATOR ',') AS review_by_user_ids,
-                   GROUP_CONCAT(review_users.first_name SEPARATOR ',') AS review_by_first_names,
-                   GROUP_CONCAT(review_users.last_name SEPARATOR ',') AS review_by_last_names,
-                   GROUP_CONCAT(review_users.address SEPARATOR ',') AS review_by_addresses,
-                   GROUP_CONCAT(review_users.email SEPARATOR ',') AS review_by_emails,
-                   GROUP_CONCAT(review_users.password SEPARATOR ',') AS review_by_passwords,
-                   GROUP_CONCAT(review_users.created_at SEPARATOR ',') AS review_by_user_created_ats,
-                   GROUP_CONCAT(review_users.updated_at SEPARATOR ',') AS review_by_user_updated_ats,
-                   GROUP_CONCAT(reviews.content SEPARATOR ',') AS review_by_contents,
-                   GROUP_CONCAT(reviews.rating SEPARATOR ',') AS review_by_ratings,
-                   GROUP_CONCAT(reviews.product_id SEPARATOR ',') AS review_by_product_ids,
-                   GROUP_CONCAT(reviews.created_at SEPARATOR ',') AS review_by_created_ats,
-                   GROUP_CONCAT(reviews.updated_at SEPARATOR ',') AS review_by_updated_ats
+                   GROUP_CONCAT(reviews.id SEPARATOR '^') AS review_by_ids,
+                   GROUP_CONCAT(review_users.id SEPARATOR '^') AS review_by_user_ids,
+                   GROUP_CONCAT(review_users.first_name SEPARATOR '^') AS review_by_first_names,
+                   GROUP_CONCAT(review_users.last_name SEPARATOR '^') AS review_by_last_names,
+                   GROUP_CONCAT(review_users.address SEPARATOR '^') AS review_by_addresses,
+                   GROUP_CONCAT(review_users.email SEPARATOR '^') AS review_by_emails,
+                   GROUP_CONCAT(review_users.password SEPARATOR '^') AS review_by_passwords,
+                   GROUP_CONCAT(review_users.created_at SEPARATOR '^') AS review_by_user_created_ats,
+                   GROUP_CONCAT(review_users.updated_at SEPARATOR '^') AS review_by_user_updated_ats,
+                   GROUP_CONCAT(reviews.content SEPARATOR '^') AS review_by_contents,
+                   GROUP_CONCAT(reviews.rating SEPARATOR '^') AS review_by_ratings,
+                   GROUP_CONCAT(reviews.product_id SEPARATOR '^') AS review_by_product_ids,
+                   GROUP_CONCAT(reviews.created_at SEPARATOR '^') AS review_by_created_ats,
+                   GROUP_CONCAT(reviews.updated_at SEPARATOR '^') AS review_by_updated_ats
                    FROM products
                    LEFT JOIN users ON products.user_id = users.id
                    LEFT JOIN reviews ON products.id = reviews.product_id
@@ -485,20 +485,20 @@ class Product:
         }
         product.creator = user.User(one_product_creator_info)
 
-        review_by_ids = results[0]['review_by_ids'].split(',') if results[0]['review_by_ids'] else ''
-        review_by_user_ids = results[0]['review_by_user_ids'].split(',') if results[0]['review_by_user_ids'] else ''
-        review_by_first_names = results[0]['review_by_first_names'].split(',') if results[0]['review_by_first_names'] else ''
-        review_by_last_names = results[0]['review_by_last_names'].split(',') if results[0]['review_by_last_names'] else ''
-        review_by_addresses = results[0]['review_by_addresses'].split(',') if results[0]['review_by_addresses'] else ''
-        review_by_emails = results[0]['review_by_emails'].split(',') if results[0]['review_by_emails'] else ''
-        review_by_passwords = results[0]['review_by_passwords'].split(',') if results[0]['review_by_passwords'] else ''
-        review_by_user_created_ats = results[0]['review_by_user_created_ats'].split(',') if results[0]['review_by_user_created_ats'] else ''
-        review_by_user_updated_ats = results[0]['review_by_user_updated_ats'].split(',') if results[0]['review_by_user_updated_ats'] else ''
-        review_by_contents = results[0]['review_by_contents'].split(',') if results[0]['review_by_contents'] else ''
-        review_by_ratings = results[0]['review_by_ratings'].split(',') if results[0]['review_by_ratings'] else ''
-        review_by_product_ids = results[0]['review_by_product_ids'].split(',') if results[0]['review_by_product_ids'] else ''
-        review_by_created_ats = results[0]['review_by_created_ats'].split(',') if results[0]['review_by_created_ats'] else ''
-        review_by_updated_ats = results[0]['review_by_updated_ats'].split(',') if results[0]['review_by_updated_ats'] else ''
+        review_by_ids = results[0]['review_by_ids'].split('^') if results[0]['review_by_ids'] else ''
+        review_by_user_ids = results[0]['review_by_user_ids'].split('^') if results[0]['review_by_user_ids'] else ''
+        review_by_first_names = results[0]['review_by_first_names'].split('^') if results[0]['review_by_first_names'] else ''
+        review_by_last_names = results[0]['review_by_last_names'].split('^') if results[0]['review_by_last_names'] else ''
+        review_by_addresses = results[0]['review_by_addresses'].split('^') if results[0]['review_by_addresses'] else ''
+        review_by_emails = results[0]['review_by_emails'].split('^') if results[0]['review_by_emails'] else ''
+        review_by_passwords = results[0]['review_by_passwords'].split('^') if results[0]['review_by_passwords'] else ''
+        review_by_user_created_ats = results[0]['review_by_user_created_ats'].split('^') if results[0]['review_by_user_created_ats'] else ''
+        review_by_user_updated_ats = results[0]['review_by_user_updated_ats'].split('^') if results[0]['review_by_user_updated_ats'] else ''
+        review_by_contents = results[0]['review_by_contents'].split('^') if results[0]['review_by_contents'] else ''
+        review_by_ratings = results[0]['review_by_ratings'].split('^') if results[0]['review_by_ratings'] else ''
+        review_by_product_ids = results[0]['review_by_product_ids'].split('^') if results[0]['review_by_product_ids'] else ''
+        review_by_created_ats = results[0]['review_by_created_ats'].split('^') if results[0]['review_by_created_ats'] else ''
+        review_by_updated_ats = results[0]['review_by_updated_ats'].split('^') if results[0]['review_by_updated_ats'] else ''
 
         for i in range(len(review_by_ids)):
             review_creator_data = {
