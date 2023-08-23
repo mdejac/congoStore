@@ -8,11 +8,13 @@ CORS(app, supports_credentials=True, resources={r"/api/products/*": {"origins": 
 @app.route('/api/products/create', methods=['POST'])
 def create_product_submit_api():
     data = request.get_json()
+    print(data)
     isValid, errors = Product.validate_product_creation_data_api(data)
     if isValid:
+        print(True)
         new_product = Product.add_product_api(data)
-        return jsonify(message="Product created succesfully", product=new_product), 201
-    return jsonify(message="Invalid data", errors=errors), 400
+        return new_product
+    return {'errors':errors}
 
 @app.route('/api/products')
 def all_products_api():

@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 
-import { fetchAllProducts } from "./path_to_apiservice";
+// import { fetchAllProducts } from "./services/path_to_apiservice";
 
 function ProductList({ title }) {
     const [products, setProducts] = useState([]);

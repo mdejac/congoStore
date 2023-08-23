@@ -11,9 +11,9 @@ def register_submit_api():
     if data:
         is_valid, errors = User.validate_user_registration_data_api(data)
         if is_valid:
-            return jsonify(message="User created successfully", user=User.create_user_api(data)), 201
+            return User.create_user_api(data)
         else:
-            return jsonify(message="User creation failed", errors=errors), 400
+            return {'errors':errors}
     return jsonify(message="Invalid data"), 400
 
 @app.route('/api/users/login', methods=['POST'])

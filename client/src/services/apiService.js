@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { fetchAllProducts } from "./apiService"
+// import { fetchAllProducts } from "./apiService"
 
 const BASE_URL = 'http://127.0.0.1:5000/api';
 
