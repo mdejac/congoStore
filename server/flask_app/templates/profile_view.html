@@ -20,7 +20,7 @@
           {% for product in user_products %}
           <tr>
             <td>{{ product.name }}</td>
-            <td>{{ product.price }}</td>
+            <td>{{ "$%.2f"|format(product.price) }}</td>
             <td>{{ product.quantity }}</td>
             <td><a href="/products/view/{{product.id}}">{{product.reviews | length}}</a></td>
             <td> <a href="/products/edit/{{product.id}}">edit</a> 

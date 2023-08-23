@@ -7,7 +7,6 @@ from flask_app import app
 @app.route('/products')
 def all_products():
     if 'user_id' in session:
-        all_products = Product.get_all_products()
         all_products_in_electronics = Product.get_all_products_by_category('electronics')
         all_products_in_furniture = Product.get_all_products_by_category('furniture')
         all_products_in_back_to_school = Product.get_all_products_by_category('back to school')
@@ -33,7 +32,12 @@ def create_product_submit():
 def view_product(id):
     if 'user_id' in session:
         product = Product.get_product_by_id(id)
-        return render_template('product_view.html', product=product)
+        related_categories = product.category.split(',')
+        all_products_in_related_category_1 = Product.get_all_products_by_category(related_categories[0]) if len(related_categories) > 0 else ''
+        all_products_in_related_category_2 = Product.get_all_products_by_category(related_categories[1]) if len(related_categories) > 1 else ''
+        all_products_in_related_category_3 = Product.get_all_products_by_category(related_categories[2]) if len(related_categories) > 2 else ''
+        return render_template('product_view.html', product=product, related_categories=related_categories, all_products_in_related_category_1=all_products_in_related_category_1,
+                               all_products_in_related_category_2=all_products_in_related_category_2, all_products_in_related_category_3=all_products_in_related_category_3)
     return redirect('/')
 
 @app.route('/products/search', methods=['POST'])
@@ -43,9 +47,17 @@ def view_search_results():
         product_category_search_results = Product.get_all_products_by_category(search)
         product_description_search_results = Product.get_all_products_by_description_like(search)
         product_name_search_results = Product.get_all_products_by_name(search)
+        related_categories = []
+        if product_name_search_results[0]:
+            related_categories = product_name_search_results[0].category.split(',')
+        all_products_in_related_category_1 = Product.get_all_products_by_category(related_categories[0]) if len(related_categories) > 0 else ''
+        all_products_in_related_category_2 = Product.get_all_products_by_category(related_categories[1]) if len(related_categories) > 1 else ''
+        all_products_in_related_category_3 = Product.get_all_products_by_category(related_categories[2]) if len(related_categories) > 2 else ''
         search_term=search
         return render_template('product_search.html', search_term=search_term, all_products_in_category=product_category_search_results,
-                                all_products_in_description=product_description_search_results, all_products_in_name=product_name_search_results)
+                                all_products_in_description=product_description_search_results, all_products_in_name=product_name_search_results,
+                                all_products_in_related_category_1=all_products_in_related_category_1, all_products_in_related_category_2=all_products_in_related_category_2,
+                                all_products_in_related_category_3=all_products_in_related_category_3, related_categories=related_categories)
     return redirect('/')
 
 @app.route('/products/delete/<int:id>')

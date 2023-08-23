@@ -4,16 +4,94 @@
 
 
 {% block content %}
+<div class="container">
 {% if cart %}
+
   <!-- Cart has items -->
   <h2>Your Cart:</h2>
-  <ul>
-    {% for product in cart.products_in_cart %}
-      <li>{{ product.name }} - {{ product.quantity }}</li>
-    {% endfor %}
-  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Purchase Qty</th>
+        <th class="text-end">Price</th>
+        <th class="text-end">Total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in cart.products_in_cart %}
+      <tr>
+          <td><a href="/products/view/{{product.id}}">{{ product.name }}</a></td>
+          <td>{{ product.quantity_to_purchase }}</td>
+          <td class="text-end">{{ "$%.2f"|format(product.price) }}</td>
+          <td class="text-end">{{ "$%.2f"|format(product.price * product.quantity_to_purchase|float) }}</td>
+          <td><a href="/carts/{{cart.id}}/product/{{product.id}}/remove">Remove from Cart</a></td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td class="text-end">Total : </td>
+          <td class="text-end">{{ "$%.2f"|format(cart.total) }}</td>
+          <td>
+              <a class="btn btn-primary" href="/carts/checkout">Checkout</a>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 {% else %}
   <!-- Cart is empty -->
   <h2>Your Cart is Empty</h2>
 {% endif %}
+
+<hr>
+<h2>Purchase history</h2>
+
+{% for cart in all_paid_carts %}
+<div class="scroll-wrapper">
+  <h3>Purchase Date : {{cart.updated_at}}</h3>
+  <div class="scroll-controls">
+    <button class="scroll-button prev-button" onclick="scrollContainer('back_to_school', 'left')">&lt;</button>
+    <div class="scroll-container" id="scroll-container-back_to_school">
+      {% for product in cart.products_in_cart %}
+        <div class="item pop-out-effect">
+          <div class="d-flex justify-content-between">
+            <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
+            <div class="card-item-price">
+              <p class="text-end">{{ "$%.2f"|format(product.price)  }}</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <a href="/products/view/{{ product.id }}">
+              <h5 class="card-title">{{ product.name }}</h5>
+            </a>
+            <p class="card-text">{{ product.description }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <button class="scroll-button next-button" onclick="scrollContainer('back_to_school', 'right')">&gt;</button>
+  </div>
+</div>
+{% endfor %}
+<script>
+  function scrollContainer(section, direction) {
+    const container = document.getElementById(`scroll-container-${section}`);
+    const scrollAmount = 600;
+    if (direction === 'left') {
+      container.scrollLeft -= scrollAmount;
+    } else {
+      container.scrollLeft += scrollAmount;
+    }
+  }
+</script>
+</div>
 {% endblock %}
