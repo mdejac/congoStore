@@ -8,7 +8,6 @@ pymysql = "*"
 flask = "*"
 flask-bcrypt = "*"
 flask-cors = "*"
-flask-session = "*"
 
 [dev-packages]
 

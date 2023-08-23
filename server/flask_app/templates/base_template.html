@@ -18,8 +18,14 @@
     <nav class="navbar navbar-expand-sm navbar-dark" style="background-color: lightslategray;">
         <a class="navbar-brand" href="#">Congo Store</a>
         {% if 'user_id' in session %}
+        <form class="form-inline mx-auto" action="/products/search" method="post">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search_term">
+            <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+        </form>
         <ul class="navbar-nav ml-auto">
-            <a class="navbar-brand" href="#">{{session.user_name}}</a>
+            <li class="nav-item">
+                <a class="nav-link" href="/carts/view/{{session['user_id']}}">Cart</a>
+            </li>
             <li class="nav-item">
                 {% block nav_option %}<!--<a class="nav-link" href="#"></a>-->{% endblock %}
             </li>
@@ -28,7 +34,8 @@
                     Options
                   </a>
                   <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="/users/edit">Edit user information</a></li>
+                    <li><a class="dropdown-item" href="/products/create">Add a product</a></li>
+                    <li><a class="dropdown-item" href="/users/profile">Profile</a></li>
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="/users/logout">Logout</a></li> 
                   </ul>

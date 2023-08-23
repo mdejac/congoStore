@@ -1,1 +1,35 @@
-<h1>Profile view page</h1>
+{% extends "base_template.html" %}
+
+{% block nav_option %}<li><a class="nav-link" href="/products">Home</a></li>{% endblock %}
+
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-3 mt-3">Your Products for Sale</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Qty in Stock</th>
+          <th>Reviews</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for product in user_products %}
+          <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.quantity }}</td>
+            <td><a href="/products/view/{{product.id}}">{{product.reviews | length}}</a></td>
+            <td> <a href="/products/edit/{{product.id}}">edit</a> 
+                 | <a href="/products/delete/{{product.id}}">delete</a>
+            </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+</div>
+
+{% endblock %}

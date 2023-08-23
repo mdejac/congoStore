@@ -1,1 +1,19 @@
-<h1>Cart view page</h1>
+{% extends "base_template.html" %}
+
+{% block nav_option %}<li><a class="nav-link" href="/products">Home</a></li>{% endblock %}
+
+
+{% block content %}
+{% if cart %}
+  <!-- Cart has items -->
+  <h2>Your Cart:</h2>
+  <ul>
+    {% for product in cart.products_in_cart %}
+      <li>{{ product.name }} - {{ product.quantity }}</li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <!-- Cart is empty -->
+  <h2>Your Cart is Empty</h2>
+{% endif %}
+{% endblock %}

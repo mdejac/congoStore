@@ -1,11 +1,17 @@
-<h1>Product View page</h1>
+{% extends "base_template.html" %}
 
+{% block nav_option %}<li><a class="nav-link" href="/products">Home</a></li>{% endblock %}
+
+
+{% block content %}
+
+<h1>Product View page</h1>
+<img src="{{url_for('static', filename=product.img_url)}}" class="product_view_img" alt="{{ product.img_url }}">
 <p>Name : {{product.name}}</p>
 <p>Category : {{product.category}}</p>
 <p>Description : {{product.description}}</p>
 <p>Quantity : {{product.quantity}}</p>
 <p>Price : {{product.price}}</p>
-<p>Potential Image : {{product.img_url}}</p>
 <p>Number of reviews : {{ product.reviews|length }}</p>
 {% for review in product.reviews %}
 <p>Product id : {{review.product_id}}</p>
@@ -16,3 +22,4 @@
 <p>Address : {{review.creator.address}}</p>
 <p>Email : {{review.creator.email}}</p>
 {% endfor %}
+{% endblock %}

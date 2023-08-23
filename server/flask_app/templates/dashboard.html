@@ -1,53 +1,107 @@
-<h1>Homepage - /products</h1>
+{% extends "base_template.html" %}
 
-<div>
+{% block content %}
+<h2> Popular Categories </h2>
 
-    <table>
-        <thead>
-          <tr>
-            <th>name</th>
-            <th>category</th>
-            <th>description</th>
-            <th>qty</th>
-            <th>price</th>
-            <th>img url</th>
-            <th>posted by</th>
-            <th>number reviews</th>
-          </tr>
-        </thead>
-        <tbody>
-            {% for product in all_products %}
-            <tr>
-              <td>{{ product.name }}</td>
-              <td>{{ product.category}}</td>
-              <td>{{ product.description}}</td>
-              <td>{{ product.quantity}}</td>
-              <td>{{ product.price}}</td>
-              <td>{{ product.img_url}}</td>
-              <td>{{ product.creator.first_name }} {{ product.creator.last_name }}</td>
-              <td>{{ product.reviews|length }}</td>
-              <table>
-                <tr>
-                  <th>content</th>
-                  <th>rating</th>
-                  <th>Posted by</th>
-                  <th>Created date</th>
-                  <th>Updated date</th>
-                </tr>
-                <tbody>
-                    {% for review in product.reviews %}
-                    <tr>
-                      <td>{{review.content}}</td>
-                      <td>{{review.rating}}</td>
-                      <td>{{review.creator.first_name}} {{review.creator.last_name}}</td>
-                      <td>{{review.created_at}}</td>
-                      <td>{{review.updated_at}}</td>
-                    </tr>
-                    {% endfor %}
-                  </tbody>
-              </table>
-            </tr>
-            {% endfor %}
-        </tbody>
-      </table>
+<div class="scroll-wrapper">
+  <h3>Back to School</h3>
+  <div class="scroll-controls">
+    <button class="scroll-button prev-button" onclick="scrollContainer('back_to_school', 'left')">&lt;</button>
+    <div class="scroll-container" id="scroll-container-back_to_school">
+      {% for product in all_products_in_back_to_school %}
+        <div class="item">
+          <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
+          <div class="card-body">
+            <a href="/products/view/{{ product.id }}">
+              <h5 class="card-title">{{ product.name }}</h5>
+            </a>
+            <p class="card-text">{{ product.price }}</p>
+            <p class="card-text">{{ product.description }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <button class="scroll-button next-button" onclick="scrollContainer('back_to_school', 'right')">&gt;</button>
+  </div>
 </div>
+
+<div class="scroll-wrapper">
+  <h3>Computers</h3>
+  <div class="scroll-controls">
+    <button class="scroll-button prev-button" onclick="scrollContainer('computers', 'left')">&lt;</button>
+    <div class="scroll-container" id="scroll-container-computers">
+      {% for product in all_products_in_computers %}
+        <div class="item">
+          <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
+          <div class="card-body">
+            <a href="/products/view/{{ product.id }}">
+              <h5 class="card-title">{{ product.name }}</h5>
+            </a>
+            <p class="card-text">{{ product.price }}</p>
+            <p class="card-text">{{ product.description }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <button class="scroll-button next-button" onclick="scrollContainer('computers', 'right')">&gt;</button>
+  </div>
+</div>
+
+
+<div class="scroll-wrapper">
+  <h3>Electronics</h3>
+  <div class="scroll-controls">
+    <button class="scroll-button prev-button" onclick="scrollContainer('electronics', 'left')">&lt;</button>
+    <div class="scroll-container" id="scroll-container-electronics">
+      {% for product in all_products_in_electronics %}
+        <div class="item">
+          <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
+          <div class="card-body">
+            <a href="/products/view/{{ product.id }}">
+              <h5 class="card-title">{{ product.name }}</h5>
+            </a>
+            <p class="card-text">{{ product.price }}</p>
+            <p class="card-text">{{ product.description }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <button class="scroll-button next-button" onclick="scrollContainer('electronics', 'right')">&gt;</button>
+  </div>
+</div>
+
+<div class="scroll-wrapper">
+  <h3>Furniture</h3>
+  <div class="scroll-controls">
+    <button class="scroll-button prev-button" onclick="scrollContainer('furniture', 'left')">&lt;</button>
+    <div class="scroll-container" id="scroll-container-furniture">
+      {% for product in all_products_in_furniture %}
+        <div class="item">
+          <img src="{{url_for('static', filename=product.img_url)}}" class="card-img-top" alt="{{ product.img_url }}">
+          <div class="card-body">
+            <a href="/products/view/{{ product.id }}">
+              <h5 class="card-title">{{ product.name }}</h5>
+            </a>
+            <p class="card-text">{{ product.price }}</p>
+            <p class="card-text">{{ product.description }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    <button class="scroll-button next-button" onclick="scrollContainer('furniture', 'right')">&gt;</button>
+  </div>
+</div>
+
+<script>
+  function scrollContainer(section, direction) {
+    const container = document.getElementById(`scroll-container-${section}`);
+    const scrollAmount = 300;
+    if (direction === 'left') {
+      container.scrollLeft -= scrollAmount;
+    } else {
+      container.scrollLeft += scrollAmount;
+    }
+  }
+</script>
+
+{% endblock %}

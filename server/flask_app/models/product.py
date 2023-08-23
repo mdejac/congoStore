@@ -20,6 +20,7 @@ class Product:
         self.updated_at = data['updated_at']
         self.creator = None
         self.reviews = []
+        self.quantity_to_purchase = data.get('quantity_to_purchase', None)
 
     @classmethod
     def add_product(cls, data):
@@ -366,6 +367,88 @@ class Product:
         return all_products
     
     @classmethod
+    def get_all_products_by_name(cls, name):
+        query = """SELECT products.*, users.*,
+                   GROUP_CONCAT(reviews.id SEPARATOR ',') AS review_by_ids,
+                   GROUP_CONCAT(review_users.id SEPARATOR ',') AS review_by_user_ids,
+                   GROUP_CONCAT(review_users.first_name SEPARATOR ',') AS review_by_first_names,
+                   GROUP_CONCAT(review_users.last_name SEPARATOR ',') AS review_by_last_names,
+                   GROUP_CONCAT(review_users.address SEPARATOR ',') AS review_by_addresses,
+                   GROUP_CONCAT(review_users.email SEPARATOR ',') AS review_by_emails,
+                   GROUP_CONCAT(review_users.password SEPARATOR ',') AS review_by_passwords,
+                   GROUP_CONCAT(review_users.created_at SEPARATOR ',') AS review_by_user_created_ats,
+                   GROUP_CONCAT(review_users.updated_at SEPARATOR ',') AS review_by_user_updated_ats,
+                   GROUP_CONCAT(reviews.content SEPARATOR ',') AS review_by_contents,
+                   GROUP_CONCAT(reviews.rating SEPARATOR ',') AS review_by_ratings,
+                   GROUP_CONCAT(reviews.product_id SEPARATOR ',') AS review_by_product_ids,
+                   GROUP_CONCAT(reviews.created_at SEPARATOR ',') AS review_by_created_ats,
+                   GROUP_CONCAT(reviews.updated_at SEPARATOR ',') AS review_by_updated_ats
+                   FROM products
+                   LEFT JOIN users ON products.user_id = users.id
+                   LEFT JOIN reviews ON products.id = reviews.product_id
+                   LEFT JOIN users AS review_users ON reviews.user_id = review_users.id
+                   WHERE INSTR(products.name, %(name)s) > 0
+                   GROUP BY products.id;"""
+        results = connectToMySQL(cls.db).query_db(query, {'name' : name})
+        all_products = []
+        for result in results:
+            one_product = cls(result)
+            one_product_creator_info = {
+                'id': result['users.id'],
+                'first_name': result['first_name'],
+                'last_name': result['last_name'],
+                'address': result['address'],
+                'email': result['email'],
+                'password': result['password'],
+                'created_at': result['users.created_at'],
+                'updated_at': result['users.updated_at']
+            }
+            one_product.creator = user.User(one_product_creator_info)
+
+            review_by_ids = result['review_by_ids'].split(',') if result['review_by_ids'] else ''
+            review_by_user_ids = result['review_by_user_ids'].split(',') if result['review_by_user_ids'] else ''
+            review_by_first_names = result['review_by_first_names'].split(',') if result['review_by_first_names'] else ''
+            review_by_last_names = result['review_by_last_names'].split(',') if result['review_by_last_names'] else ''
+            review_by_addresses = result['review_by_addresses'].split(',') if result['review_by_addresses'] else ''
+            review_by_emails = result['review_by_emails'].split(',') if result['review_by_emails'] else ''
+            review_by_passwords = result['review_by_passwords'].split(',') if result['review_by_passwords'] else ''
+            review_by_user_created_ats = result['review_by_user_created_ats'].split(',') if result['review_by_user_created_ats'] else ''
+            review_by_user_updated_ats = result['review_by_user_updated_ats'].split(',') if result['review_by_user_updated_ats'] else ''
+            review_by_product_ids = result['review_by_product_ids'].split(',') if result['review_by_product_ids'] else ''
+            review_by_contents = result['review_by_contents'].split(',') if result['review_by_contents'] else ''
+            review_by_ratings = result['review_by_ratings'].split(',') if result['review_by_ratings'] else ''
+            review_by_created_ats = result['review_by_created_ats'].split(',') if result['review_by_created_ats'] else ''
+            review_by_updated_ats = result['review_by_updated_ats'].split(',') if result['review_by_updated_ats'] else ''
+
+            for i in range(len(review_by_ids)):
+                review_creator_data = {
+                'id': int(review_by_user_ids[i]),
+                'first_name' : review_by_first_names[i],
+                'last_name' : review_by_last_names[i],
+                'address' : review_by_addresses[i],
+                'email' : review_by_emails[i],
+                'password': review_by_passwords[i],
+                'created_at': review_by_user_created_ats[i],
+                'updated_at': review_by_user_updated_ats[i]
+                }
+                one_product_review_by_info = {
+                    'id': int(review_by_ids[i]),
+                    'product_id': int(review_by_product_ids[i]),
+                    'user_id': int(review_by_user_ids[i]),
+                    'content': review_by_contents[i],
+                    'rating': review_by_ratings[i],
+                    'created_at': review_by_created_ats[i],
+                    'updated_at': review_by_updated_ats[i]
+                }
+                this_review = review.Review(one_product_review_by_info)
+                this_review.creator = user.User(review_creator_data)
+                one_product.reviews.append(this_review)
+
+            all_products.append(one_product)
+
+        return all_products
+    
+    @classmethod
     def get_product_by_id(cls, id):
         query = """SELECT products.*, users.*,
                    GROUP_CONCAT(reviews.id SEPARATOR ',') AS review_by_ids,
@@ -480,7 +563,7 @@ class Product:
     @classmethod
     def isValid_product_id(cls, id):
         data = {'id' : id}
-        query = """SELECT * FROM products
+        query = """SELECT id FROM products
                    WHERE id = %(id)s;"""
         if connectToMySQL(cls.db).query_db(query, data):
             return True
@@ -610,6 +693,24 @@ class Product:
             'updated_at': product.updated_at,
             'creator': user.User.serialize_user(product.creator),
             'reviews': [review.Review.serialize_review(this_review) for this_review in product.reviews]
+        }
+
+        return serialized_product
+    
+    @staticmethod
+    def serialize_product_for_cart(product):
+        serialized_product = {
+            'id': product.id,
+            'user_id': product.user_id,
+            'name': product.name,
+            'description': product.description,
+            'category': product.category,
+            'quantity': product.quantity,
+            'quantity_to_purchase': product.quantity_to_purchase,
+            'price': product.price,
+            'img_url': product.img_url,
+            'created_at': product.created_at,
+            'updated_at': product.updated_at
         }
 
         return serialized_product

@@ -108,6 +108,15 @@ class User:
             is_valid = False
         return is_valid
     
+    @classmethod
+    def isValid_user_id(cls, id):
+        data = {'id' : id}
+        query = """SELECT id FROM users
+                   WHERE id = %(id)s;"""
+        if connectToMySQL(cls.db).query_db(query, data):
+            return True
+        return False
+
     @staticmethod
     def parse_registration_data(data):
         parsed_data = {}
@@ -260,7 +269,6 @@ class User:
             'last_name': user.last_name,
             'address': user.address,
             'email': user.email,
-            'password' : user.password,
             'created_at': user.created_at,
             'updated_at': user.updated_at
         }

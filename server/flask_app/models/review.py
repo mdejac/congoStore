@@ -54,18 +54,15 @@ class Review:
 
     @classmethod
     def add_review_api(cls, data, product_id):
-        if cls.validate_review_creation_data(data, product_id):
-            data = {'user_id' : data['user_id'],
-                    'product_id': product_id,
-                    'content': data['content'],
-                    'rating' : data['rating']
-                    }
-            
-            query = """INSERT INTO reviews (user_id, product_id, content, rating)
-                    VALUES (%(user_id)s, %(product_id)s, %(content)s, %(rating)s);"""   
-            connectToMySQL(cls.db).query_db(query, data)
-            return True
-        return False
+        data = {'user_id' : data['user_id'],
+                'product_id': product_id,
+                'content': data['content'],
+                'rating' : data['rating']
+                }
+        
+        query = """INSERT INTO reviews (user_id, product_id, content, rating)
+                VALUES (%(user_id)s, %(product_id)s, %(content)s, %(rating)s);"""   
+        connectToMySQL(cls.db).query_db(query, data)
 
     @staticmethod
     def validate_review_creation_data_api(data, product_id):
@@ -82,6 +79,10 @@ class Review:
         if product.Product.get_product_by_id(product_id).id == None:
             errors['product_id'] = []
             errors['product_id'].append('Invalid Product')
+            is_valid = False
+        if user.User.isValid_user_id(data['user_id']):
+            errors['user_id'] = []
+            errors['user_id'].append('Invalid User id')
             is_valid = False
         return is_valid, errors
    
