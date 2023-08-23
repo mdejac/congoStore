@@ -1,13 +1,12 @@
 import React from 'react'
-import Register from './Register'
+import RegistrationForm from './RegistrationForm'
 import LoginForm from './LoginForm'
 
 const RegLog = () => {
     return (
-        <div >
-            <Register />
+        <div>
+            <RegistrationForm />
             <LoginForm />
-
         </div>
     )
 }

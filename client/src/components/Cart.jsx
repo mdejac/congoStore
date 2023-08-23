@@ -9,7 +9,7 @@ const Cart = (props) => {
 
     useEffect(() => {
         // console.log(user, "user")
-        axios.get(`http://localhost:5000/api/users/${user._id}/${cart._id}`)
+        axios.get(`http://localhost:5000/api/carts/${user._id}`)
             .then(res => {
                 console.log(res.data, "res.data")
                 console.log()
@@ -25,12 +25,12 @@ const Cart = (props) => {
         <div>
             < p > {user.name}'s cart</p>
             {
-                allProducts.map((product, index) => (<div key={cart._id}>
+                cart['products_in_cart'].map((product, index) => (<div key={product._id}>
                     <p>Product: {product.name}</p>
                     {/* <p>{product.image}</p> */}
                     <p>Price: {product.price}</p>
-                    <p>Quantity: {product.quantity}</p>
-                    <p>Total: {product.price} x {product.quantity}</p>
+                    <p>Quantity: {product.quantity_in_cart}</p>
+                    <p>Total: {product.price} x {product.quantity_in_cart}</p>
                 </div>))
 
 

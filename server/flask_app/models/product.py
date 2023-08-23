@@ -658,7 +658,7 @@ class Product:
             errors['description'] = []
             errors['description'].append('Description must be at least 3 characters')
             is_valid = False
-        if len(data['category']) < 3:
+        if len(data['category'].strip()) < 3:
             errors['category'] = []
             errors['category'].append('Category must be at least 3 characters')
             is_valid = False    

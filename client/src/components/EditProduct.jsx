@@ -41,12 +41,13 @@ const EditProduct = (props) => {
     return (
         <div>
             <p>Edit a Product</p>
-            <form onSubmit={onSubmitHandler}>
+            {/* <form onSubmit={onSubmitHandler}>
                 <div>
                     <label for="category">Category</label>
                     <br />
                     <select name="category" id="cars">
                         <option value={productOne.category} name="category" onChange={changeHandler} />
+                    </select>
                 </div>
                 <div>
                     <label>Description</label>
@@ -56,7 +57,7 @@ const EditProduct = (props) => {
                 <div>
                     <label>Image</label>
                     <br />
-                    {/* Not sure about type here???? */}
+                   
                     <input type="url" value={productOne.img_url} name="img_urg" onChange={changeHandler} />
                 </div>
                 <div>
@@ -70,7 +71,7 @@ const EditProduct = (props) => {
                     <input type="text" value={productOne.quantity} name="quantity" onChange={changeHandler} />
                 </div>
 
-            </form>
+            </form> */}
         </div>
     )
 }
