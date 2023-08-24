@@ -9,9 +9,6 @@ import { useNavigate } from 'react-router-dom';
 // const navigate = useNavigate();
 const LoginForm = () => {
 
-  const [user, setUser] = useState({});
-
-    //How to save this for use everwhere
   const navigate = useNavigate();
   const FormStyles = `mb-5 rounded-lg bg-primary-300 px-5 py-3 placeholder-white`
   
@@ -22,39 +19,27 @@ const LoginForm = () => {
   })
 
   const handleSubmit = async (e) => {
-      e.preventDefault();
+    e.preventDefault();
     
-  const data = {
-    email: loginInfo.email,
-    password: loginInfo.password,
+    const data = {
+      email: loginInfo.email,
+      password: loginInfo.password,
+    };
+    
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/api/users/login', data);
+      if (response.data.errors) {
+        setLoginErrors(response.data.errors);
+      } else {
+        setLoginErrors({})
+        setLoginInfo({email:"", password:""})
+        localStorage.setItem("user", JSON.stringify(response.data, null, 2));
+        navigate("/products");
+      }
+    } catch (error) {
+        console.error('Error:', error);
+    }
   };
-    
-        try {
-          console.log('Data', data)  
-          const response = await axios.post('http://127.0.0.1:5000/api/users/login', data);
-          if (response.data.errors) {
-            setLoginErrors(response.data.errors);
-          } else {
-            setLoginErrors({})
-            setLoginInfo({email:"", password:""})
-            
-            setUser(response.data)
-            localStorage.setItem("user", user);
-            navigate("/products");
-            /*This will now hold a user object will have :
-                id
-                first_name
-                last_name
-                address
-                email
-                created_at
-                updated_at
-            */
-          }
-        } catch (error) {
-            console.error('Error:', error);
-        }
-      };
 
     return (
       <div className='md:flex justify-around items-center bg-secondary-100 rounded-lg p-10 mt-25'>

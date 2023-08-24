@@ -6,7 +6,7 @@ import ProductScroll from "./ProductScroll";
 
 function Dashboard() {
     const navigate = useNavigate();
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState();
 
     const categories = {
         1 : 'Back to School',
@@ -18,12 +18,13 @@ function Dashboard() {
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
         if (loggedInUser) {
-          setUser(loggedInUser);
+            const foundUser = JSON.parse(loggedInUser);
+            setUser(foundUser.user);
         }
         else {
             navigate("/");
         }
-      }, []);
+    }, []);
    
     return (
         <div className="dashboard mt-5">

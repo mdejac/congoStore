@@ -4,7 +4,6 @@ import LoginPic from "../assets/congo.png";
 import { useNavigate } from 'react-router-dom';
 
 const ProductCreate = () => {
-    const [product, setProduct] = useState({});
     const [productCreateErrors, setProductCreateErrors] = useState([]);
     const navigate = useNavigate();
     const [user, setUser] = useState({});
@@ -23,7 +22,8 @@ const ProductCreate = () => {
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
         if (loggedInUser) {
-          setUser(loggedInUser);
+            const foundUser = JSON.parse(loggedInUser);
+            setUser(foundUser.user);
         }
         else {
             navigate("/");
@@ -35,10 +35,9 @@ const ProductCreate = () => {
     const handleProductCreateSubmit = async (e) => {
         e.preventDefault();
     
-        // user_id should come from state, the logged in user's id
         // /img/default.png is required until image upload works.
         const data = {
-            user_id : 3,
+            user_id : user.id,
             name : productCreateInfo.name,
             category : productCreateInfo.category,
             description : productCreateInfo.description,
@@ -54,28 +53,7 @@ const ProductCreate = () => {
           } else {
             setProductCreateErrors({})
             setProductCreateInfo(initialProductCreateState)
-
-            setProduct(response.data)
             navigate('/products')
-            /*This will now hold a user object will have :
-                id
-                name
-                category
-                description
-                price
-                quantity
-                creator : {
-                    id
-                    first_name
-                    last_name
-                    address
-                    email
-                    created_at
-                    updated_at
-                }
-                created_at
-                updated_at
-            */
           }
         } catch (error) {
             console.error('Error:', error);

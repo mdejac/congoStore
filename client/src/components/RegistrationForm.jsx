@@ -5,9 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 function RegistrationForm() {
-    //How to save this for use everwhere
     const navigate = useNavigate();
-    const [user, setUser] = useState({});
 
     const [registrationErrors, setRegistrationErrors] = useState([]);
 
@@ -43,20 +41,8 @@ function RegistrationForm() {
           } else {
             setRegistrationErrors({})
             setRegisterInfo(initalRegistrationState)
-            setUser(response.data)
-            localStorage.setItem("user", user);
+            localStorage.setItem("user", JSON.stringify(response.data, null, 2));
             navigate("/products");
-
-            /*This will now hold a user object will have :
-                id
-                first_name
-                last_name
-                address
-                email
-                created_at
-                updated_at
-            */
-
           }
         } catch (error) {
             console.error('Error:', error);

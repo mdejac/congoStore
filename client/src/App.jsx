@@ -6,6 +6,7 @@ import Login from "./components/LoginForm";
 import RegistrationForm from "./components/RegistrationForm";
 import Logout from "./components/Logout";
 import Navbar from "./components/Navbar";
+import ProductDetail from "./components/ProductDetail";
 
 function App() {
     
@@ -19,6 +20,7 @@ function App() {
                 <Route path="/" element={<Login/>} />
                 <Route path="/register" element={<RegistrationForm/>} />
                 <Route path="/products" element={<Dashboard/>} />
+                <Route path="/products/view/:id" element={<ProductDetail/>} />
                 <Route path="/products/create" element={<ProductCreate/>} />
             </Routes>
             </div>
