@@ -26,8 +26,8 @@ const ProductScroll = ({searchType}) => {
     }
   
     return (
-    <div className="mt-20 scroll-wrapper">
-        <h2 className="text-2xl font-semibold mb-4">{searchType}</h2>
+    <div className="scroll-wrapper bg-secondary-100">
+        <h2 className="text-2xl font-semibold mb-4 text-white">{searchType}</h2>
         <div className="scroll-controls">
             <button className="scroll-button prev-button" onClick={() => scrollContainer(searchType, 'left')}>
                 &lt;
@@ -35,7 +35,7 @@ const ProductScroll = ({searchType}) => {
             
             <div className="scroll-container" id={`scroll-container-${searchType}`}>
                 {products.map((product) => (
-                    <div key={product.id} className="item pop-out-effect">
+                    <div key={product.id} className="item pop-out-effect bg-white rounded-md">
                         <div className="flex justify-between my-2">
                             <img src={product.img_url} alt="Image coming soon" className="card-img-top" />
                             <div className="card-item-price">

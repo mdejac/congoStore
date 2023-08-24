@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import ReviewForm from './ReviewForm';
@@ -40,18 +40,26 @@ const ProductDetail = () => {
     };
 
     return (
-        <div>
-            <h1>{product.name}</h1>
+        <div className='bg-secondary-100 text-white'>
+            <h1> </h1> <br/>
+            <h1 className='text-center font-extrabold text-2xl text-primary-500 py-5'>{product.name}</h1>
             {Object.keys(product).length > 0 ? (
-                <div>
+                <div className='md:flex justify-around'>
                     <div>
 
-                        <p>Product id {product.id}</p>
+                        <p>Product ID: {product.id}</p>
                         <p>Category: {product.category}</p>
                         <p>Description: {product.description}</p>
                         <p>Seller: {product.creator.first_name} {product.creator.last_name}</p>
                         <p>Quantity: {product.quantity}</p>
-                        <p>Price: {product.price}</p>
+                        <p>Price: ${product.price}</p>
+                        <Link to="/products">
+                            <button className='className="mt-5 rounded-lg bg-primary-300 px-20 py-3 transition duration-500 hover:text-white'>
+                                Home
+                            </button>
+                        </Link>
+                    </div>
+                    <div>
                         <p>Reviews:</p>
                         <ul>
                             {product.reviews.map((review, index) => (
@@ -62,8 +70,8 @@ const ProductDetail = () => {
                                 </li>
                             ))}
                         </ul>
+                        <ReviewForm product_id={id} user_id={user.id} onReviewSubmit={handleReviewSubmission}/>
                     </div>
-                    <ReviewForm product_id={id} user_id={user.id} onReviewSubmit={handleReviewSubmission}/>
                 </div>
              ) : ( 
                 <p>Loading...</p> 
