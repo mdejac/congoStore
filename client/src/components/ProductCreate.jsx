@@ -4,7 +4,6 @@ import LoginPic from "../assets/congo.png";
 import { useNavigate } from 'react-router-dom';
 
 const ProductCreate = () => {
-    const [product, setProduct] = useState({});
     const [productCreateErrors, setProductCreateErrors] = useState([]);
     const navigate = useNavigate();
     const [user, setUser] = useState({});
@@ -23,7 +22,8 @@ const ProductCreate = () => {
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
         if (loggedInUser) {
-          setUser(loggedInUser);
+            const foundUser = JSON.parse(loggedInUser);
+            setUser(foundUser.user);
         }
         else {
             navigate("/");
@@ -35,10 +35,9 @@ const ProductCreate = () => {
     const handleProductCreateSubmit = async (e) => {
         e.preventDefault();
     
-        // user_id should come from state, the logged in user's id
         // /img/default.png is required until image upload works.
         const data = {
-            user_id : 3,
+            user_id : user.id,
             name : productCreateInfo.name,
             category : productCreateInfo.category,
             description : productCreateInfo.description,
@@ -54,28 +53,7 @@ const ProductCreate = () => {
           } else {
             setProductCreateErrors({})
             setProductCreateInfo(initialProductCreateState)
-
-            setProduct(response.data)
             navigate('/products')
-            /*This will now hold a user object will have :
-                id
-                name
-                category
-                description
-                price
-                quantity
-                creator : {
-                    id
-                    first_name
-                    last_name
-                    address
-                    email
-                    created_at
-                    updated_at
-                }
-                created_at
-                updated_at
-            */
           }
         } catch (error) {
             console.error('Error:', error);
@@ -93,7 +71,7 @@ const ProductCreate = () => {
         </h1>
         <form className='bg-primary-500 p-10 rounded-lg' onSubmit={handleProductCreateSubmit}>
             <div>
-                <label for="name" className="block mb-2 text-sm font-medium text-black dark:text-black">Product Name:</label>
+                <label htmlFor="name" className="block mb-2 text-sm font-medium text-black dark:text-black">Product Name:</label>
                 {productCreateErrors['name'] && (
                 <p style={{ color: 'red' }}>{productCreateErrors['name']}</p>
                 )}
@@ -105,14 +83,14 @@ const ProductCreate = () => {
                     onChange={(e) => setProductCreateInfo({...productCreateInfo, name: e.target.value})} />
             </div>
             <div>
-                <label for="category" className="block mb-2 text-sm font-medium text-black dark:text-black">Categories:</label>
+                <label htmlFor="category" className="block mb-2 text-sm font-medium text-black dark:text-black">Categories:</label>
                 {productCreateErrors['category'] && (
                 <p style={{ color: 'red' }}>{productCreateErrors['category']}</p>
                 )}
                 <input id='category' placeholder='Electronics, Home Goods, Gadgets...' className={FormStyles} type="text" value={productCreateInfo.category} onChange={(e) => setProductCreateInfo({...productCreateInfo, category: e.target.value})} />
            </div>
             <div>
-                <label for="description" className="block mb-2 text-sm font-medium text-black dark:text-black">Description:</label>
+                <label htmlFor="description" className="block mb-2 text-sm font-medium text-black dark:text-black">Description:</label>
                 {productCreateErrors['description'] && (
                 <p style={{ color: 'red' }}>{productCreateErrors['description']}</p>
                 )}
@@ -143,18 +121,18 @@ const ProductCreate = () => {
                 </div>
             </div>
             <div>
-                <label for="quantity" className="block mb-2 text-sm font-medium text-black dark:text-black">Quantity</label>
+                <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-black dark:text-black">Quantity</label>
                 {productCreateErrors['quantity'] && (
                 <p style={{ color: 'red' }}>{productCreateErrors['quantity']}</p>
                 )}
                 <input id='quantity' placeholder='0' className={FormStyles} type="number" value={productCreateInfo.quantity} onChange={(e) => setProductCreateInfo({...productCreateInfo, quantity: e.target.value})} />
             </div>
             <div>
-            <label for="quantity" className="block mb-2 text-sm font-medium text-black dark:text-black">Image Upload:</label>
+            <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-black dark:text-black">Image Upload:</label>
                 {productCreateErrors['img_url'] && (
                 <p style={{ color: 'red' }}>{productCreateErrors['img_url']}</p>
                 )}
-                <input className={FormStyles} disabled="true" type="multipart-file" value={productCreateInfo.img_url} onChange={(e) => setProductCreateInfo({...productCreateInfo, img_url: e.target.value})} />
+                <input className={FormStyles} disabled={true} type="multipart-file" value={productCreateInfo.img_url} onChange={(e) => setProductCreateInfo({...productCreateInfo, img_url: e.target.value})} />
             </div>
             <button className='className="mt-5 rounded-lg bg-secondary-300 px-20 py-3 transition duration-500 hover:text-white' type="submit">Submit</button>
         </form>

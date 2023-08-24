@@ -11,7 +11,7 @@ def register_submit_api():
     if data:
         is_valid, errors = User.validate_user_registration_data_api(data)
         if is_valid:
-            return User.create_user_api(data)
+            return jsonify({'user':User.create_user_api(data)}), 200
         else:
             return {'errors':errors}
     return jsonify(message="Invalid data"), 400
@@ -20,9 +20,7 @@ def register_submit_api():
 def login_user_api():
     data = request.get_json()
     if data:
-        user = User.login_user_api(data)
-        print(user)
-        return user
+        return jsonify({'user' : User.login_user_api(data)}), 200
     return jsonify(message="Invalid data"), 400
 
 @app.route('/api/users/<int:user_id>')

@@ -53,9 +53,9 @@ class Review:
     # API Specific Methods
 
     @classmethod
-    def add_review_api(cls, data, product_id):
+    def add_review_api(cls, data):
         data = {'user_id' : data['user_id'],
-                'product_id': product_id,
+                'product_id': data['product_id'],
                 'content': data['content'],
                 'rating' : data['rating']
                 }
@@ -65,7 +65,7 @@ class Review:
         connectToMySQL(cls.db).query_db(query, data)
 
     @staticmethod
-    def validate_review_creation_data_api(data, product_id):
+    def validate_review_creation_data_api(data):
         is_valid = True
         errors = {}
         if len(data['content']) < 5:
@@ -76,11 +76,11 @@ class Review:
             errors['rating'] = []
             errors['rating'].append('Rating must be 1 to 5 asteriks')
             is_valid = False
-        if product.Product.get_product_by_id(product_id).id == None:
+        if product.Product.get_product_by_id(data['product_id']).id == None:
             errors['product_id'] = []
             errors['product_id'].append('Invalid Product')
             is_valid = False
-        if user.User.isValid_user_id(data['user_id']):
+        if not user.User.isValid_user_id(data['user_id']):
             errors['user_id'] = []
             errors['user_id'].append('Invalid User id')
             is_valid = False
