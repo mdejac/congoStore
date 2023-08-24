@@ -1,8 +1,23 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
+import { useNavigate } from "react-router-dom";
+
 // import SearchBar from "./SearchBar";
 // import ProductList from "./ProductList";
 
-function Dashboard({ products, onSearch }) {
+function Dashboard() {
+    const navigate = useNavigate();
+    const [user, setUser] = useState({});
+
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem("user");
+        if (loggedInUser) {
+          setUser(loggedInUser);
+        }
+        else {
+            navigate("/");
+        }
+      }, []);
+    
     return (
         <div className="dashboard">
             <h1>THIS IS THE DASHBOARD</h1>
