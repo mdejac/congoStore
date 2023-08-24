@@ -1,12 +1,19 @@
 import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
+import "../App.css";
 
-// import SearchBar from "./SearchBar";
-// import ProductList from "./ProductList";
+import ProductScroll from "./ProductScroll";
 
 function Dashboard() {
     const navigate = useNavigate();
     const [user, setUser] = useState({});
+
+    const categories = {
+        1 : 'Back to School',
+        2 : 'Computers',
+        3 : 'Electronics',
+        4 : 'Furniture'
+    }
 
     useEffect(() => {
         const loggedInUser = localStorage.getItem("user");
@@ -17,14 +24,12 @@ function Dashboard() {
             navigate("/");
         }
       }, []);
-    
+   
     return (
-        <div className="dashboard">
-            <h1>THIS IS THE DASHBOARD</h1>
-            {/* <SearchBar onSearch={onSearch} />
-            <div className="product-grid">
-                <ProductList title="All Products" products={products} />
-            </div> */}
+        <div className="dashboard mt-5">
+            {Object.keys(categories).map((categoryId) => (
+                <ProductScroll key={categoryId} searchType={categories[categoryId]}/>
+            ))}
         </div>
     );
 }

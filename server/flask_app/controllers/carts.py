@@ -25,8 +25,7 @@ def view_cart():
 def remove_product_from_cart(cart_id, product_id):
     if 'user_id' in session:
         Cart.remove_item_from_cart({'cart_id':cart_id, 'product_id':product_id})
-        cart = Cart.view_cart_by_user_id(session['user_id'])
-        return render_template('cart_view.html', cart=cart)
+        return redirect('/carts/view')
     return redirect('/')
 
 @app.route('/carts/checkout')
