@@ -38,7 +38,7 @@ class Cart:
                                         VALUES (%(cart_id)s, %(product_id)s, %(quantity_to_purchase)s);"""
             connectToMySQL(cls.db).query_db(add_item_to_cart_query, data)
         else:
-            data['quantity_to_purchase'] = data['quantity_to_purchase'] + product_in_cart_result[0]['quantity_to_purchase']
+            data['quantity_to_purchase'] = int(data['quantity_to_purchase']) + int(product_in_cart_result[0]['quantity_to_purchase'])
             update_item_in_cart_quantity = """UPDATE products_in_carts SET
                                               quantity_to_purchase = %(quantity_to_purchase)s
                                               WHERE cart_id = %(cart_id)s AND product_id = %(product_id)s;"""

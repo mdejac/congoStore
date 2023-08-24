@@ -174,16 +174,5 @@
     </div>
     {% endif %}
   </div>
-<script>
-  function scrollContainer(section, direction) {
-    const container = document.getElementById(`scroll-container-${section}`);
-    const scrollAmount = 300;
-    if (direction === 'left') {
-      container.scrollLeft -= scrollAmount;
-    } else {
-      container.scrollLeft += scrollAmount;
-    }
-  }
-</script>
 
 {% endblock %}
