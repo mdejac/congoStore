@@ -28,7 +28,10 @@ function Dashboard() {
     return (
         <div className="dashboard mt-5">
             {Object.keys(categories).map((categoryId) => (
-                <ProductScroll key={categoryId} searchType={categories[categoryId]}/>
+                <ProductScroll 
+                key={categoryId} 
+                searchType={categories[categoryId]}
+                className="mt-5"/>
             ))}
         </div>
     );
