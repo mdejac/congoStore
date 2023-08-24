@@ -57,7 +57,7 @@ const LoginForm = () => {
       };
 
     return (
-      <div className='md:flex justify-around items-center bg-secondary-100 rounded-lg p-10 mt-15'>
+      <div className='md:flex justify-around items-center bg-secondary-100 rounded-lg p-10 mt-25'>
         <div>
           <img 
           src={LoginPic} 
