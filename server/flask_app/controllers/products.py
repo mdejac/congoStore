@@ -48,7 +48,7 @@ def view_search_results():
         product_description_search_results = Product.get_all_products_by_description_like(search)
         product_name_search_results = Product.get_all_products_by_name(search)
         related_categories = []
-        if product_name_search_results[0]:
+        if product_name_search_results:
             related_categories = product_name_search_results[0].category.split(',')
         all_products_in_related_category_1 = Product.get_all_products_by_category(related_categories[0]) if len(related_categories) > 0 else ''
         all_products_in_related_category_2 = Product.get_all_products_by_category(related_categories[1]) if len(related_categories) > 1 else ''

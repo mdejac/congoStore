@@ -1,42 +1,90 @@
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.item {
+  flex: 0 0 auto;
+  width: 300px;
+  height: 300px;
+  margin-right: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.item a {
+  display: block;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  height: 4em;
+  line-height: 1em; 
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.item img {
+  margin-top: 5px;
+  margin-left: 5px;
+  max-width: 100px;
+  height: auto;
 }
 
-.card {
-  padding: 2em;
+.card-item-price {
+display: flex;
+margin-right: 5px;
 }
 
-.read-the-docs {
-  color: #888;
-} */
+.card-text {
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 3;
+-webkit-box-orient: vertical;
+max-height: 6em;
+}
+
+.card-img-top {
+border: black;
+width: 32px;
+height: 32px;
+}
+
+.scroll-controls {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.scroll-button {
+background-color: transparent;
+border-radius: 5px;
+color: #999; 
+border: none;
+padding: 5px 10px;
+cursor: pointer;
+transition: color 0.3s, background-color 0.3s;
+max-height: 175px;
+margin-top: 75px;
+}
+
+.scroll-button:hover {
+color: #000;
+background-color: lightgray; 
+}
+
+.product_view_img {
+width: 200px;
+margin-left: 20px;
+}
+
+.pop-out-effect {
+transition: transform 0.3s;
+}
+
+.pop-out-effect:hover {
+transform: scale(1.05);
+z-index: 1;
+box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
