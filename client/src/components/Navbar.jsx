@@ -3,6 +3,7 @@ import useMediaQuery from '../hooks/useMediaQuery';
 import { Link } from 'react-router-dom';
 import {ShoppingCartIcon, Bars3Icon, XMarkIcon} from "@heroicons/react/24/solid";
 import Logout from './Logout';
+import SearchBar from './SearchBar';
 
 
 
@@ -24,6 +25,7 @@ const Navbar = () => {
                     <h1 className='text-white text-2xl'>
                         Congo Superstore
                     </h1>
+                    <SearchBar />
                     {isAboveMediumScreens ? (
                         <div className={`${flexBetween} w-full`}>
                             <div className={`${flexBetween} gap-8 text-sm`}>

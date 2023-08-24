@@ -1,12 +1,13 @@
-import React, { useEffect, useState,  } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route, } from "react-router-dom";
 import Dashboard from './components/Dashboard';
 import ProductCreate from "./components/ProductCreate";
 import Login from "./components/LoginForm";
 import RegistrationForm from "./components/RegistrationForm";
-import Logout from "./components/Logout";
 import Navbar from "./components/Navbar";
 import ProductDetail from "./components/ProductDetail";
+import SearchResultView from "./components/SearchResultView";
+import EditProduct from "./components/EditProduct";
 
 function App() {
     
@@ -22,6 +23,8 @@ function App() {
                 <Route path="/products" element={<Dashboard/>} />
                 <Route path="/products/view/:id" element={<ProductDetail/>} />
                 <Route path="/products/create" element={<ProductCreate/>} />
+                <Route path="/products/search/:searchTerm" element={<SearchResultView/>} />
+                <Route path="/products/edit/:id" element={<EditProduct/>} />
             </Routes>
             </div>
         </BrowserRouter>
