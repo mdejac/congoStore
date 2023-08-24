@@ -9,4 +9,4 @@ const ReviewProduct = () => {
     )
 }
 
-export default ReviewProduct
+export default ReviewProduct;

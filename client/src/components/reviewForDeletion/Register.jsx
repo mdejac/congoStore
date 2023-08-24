@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const Register = () => {
+const Register = (user, setUser) => {
     const navigate = useNavigate();
     const [user, setUser] = useState({
         firstName: "",
@@ -22,7 +22,7 @@ const Register = () => {
         axios.post('http://localhost:8000/api/users/register', userInfo, { withCredentials: true })
             .then(res => {
                 console.log(res)
-                navigate("/products")
+                // navigate("/products")
             })
             .catch(err => console.log(err))
     }
