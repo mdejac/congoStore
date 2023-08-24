@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="container">
-{% if cart %}
+{% if cart and cart.products_in_cart %}
 
   <!-- Cart has items -->
   <h2>Your Cart:</h2>
@@ -59,8 +59,8 @@
 <div class="scroll-wrapper">
   <h3>Purchase Date : {{cart.updated_at}}</h3>
   <div class="scroll-controls">
-    <button class="scroll-button prev-button" onclick="scrollContainer('back_to_school', 'left')">&lt;</button>
-    <div class="scroll-container" id="scroll-container-back_to_school">
+    <button class="scroll-button prev-button" onclick="scrollContainer('{{cart.id}}', 'left')">&lt;</button>
+    <div class="scroll-container" id="scroll-container-{{cart.id}}">
       {% for product in cart.products_in_cart %}
         <div class="item pop-out-effect">
           <div class="d-flex justify-content-between">
@@ -78,20 +78,10 @@
         </div>
       {% endfor %}
     </div>
-    <button class="scroll-button next-button" onclick="scrollContainer('back_to_school', 'right')">&gt;</button>
+    <button class="scroll-button next-button" onclick="scrollContainer('{{cart.id}}', 'right')">&gt;</button>
   </div>
 </div>
 {% endfor %}
-<script>
-  function scrollContainer(section, direction) {
-    const container = document.getElementById(`scroll-container-${section}`);
-    const scrollAmount = 600;
-    if (direction === 'left') {
-      container.scrollLeft -= scrollAmount;
-    } else {
-      container.scrollLeft += scrollAmount;
-    }
-  }
-</script>
 </div>
+
 {% endblock %}
