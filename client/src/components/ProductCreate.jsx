@@ -93,7 +93,7 @@ const ProductCreate = () => {
         </h1>
         <form className='bg-primary-500 p-10 rounded-lg' onSubmit={handleProductCreateSubmit}>
             <div>
-                <label for="name" className="block mb-2 text-sm font-medium text-black dark:text-black">Product Name:</label>
+                <label htmlFor="name" className="block mb-2 text-sm font-medium text-black dark:text-black">Product Name:</label>
                 {productCreateErrors['name'] && (
                 <p style={{ color: 'red' }}>{productCreateErrors['name']}</p>
                 )}
@@ -105,14 +105,14 @@ const ProductCreate = () => {
                     onChange={(e) => setProductCreateInfo({...productCreateInfo, name: e.target.value})} />
             </div>
             <div>
-                <label for="category" className="block mb-2 text-sm font-medium text-black dark:text-black">Categories:</label>
+                <label htmlFor="category" className="block mb-2 text-sm font-medium text-black dark:text-black">Categories:</label>
                 {productCreateErrors['category'] && (
                 <p style={{ color: 'red' }}>{productCreateErrors['category']}</p>
                 )}
                 <input id='category' placeholder='Electronics, Home Goods, Gadgets...' className={FormStyles} type="text" value={productCreateInfo.category} onChange={(e) => setProductCreateInfo({...productCreateInfo, category: e.target.value})} />
            </div>
             <div>
-                <label for="description" className="block mb-2 text-sm font-medium text-black dark:text-black">Description:</label>
+                <label htmlFor="description" className="block mb-2 text-sm font-medium text-black dark:text-black">Description:</label>
                 {productCreateErrors['description'] && (
                 <p style={{ color: 'red' }}>{productCreateErrors['description']}</p>
                 )}
@@ -143,18 +143,18 @@ const ProductCreate = () => {
                 </div>
             </div>
             <div>
-                <label for="quantity" className="block mb-2 text-sm font-medium text-black dark:text-black">Quantity</label>
+                <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-black dark:text-black">Quantity</label>
                 {productCreateErrors['quantity'] && (
                 <p style={{ color: 'red' }}>{productCreateErrors['quantity']}</p>
                 )}
                 <input id='quantity' placeholder='0' className={FormStyles} type="number" value={productCreateInfo.quantity} onChange={(e) => setProductCreateInfo({...productCreateInfo, quantity: e.target.value})} />
             </div>
             <div>
-            <label for="quantity" className="block mb-2 text-sm font-medium text-black dark:text-black">Image Upload:</label>
+            <label htmlFor="quantity" className="block mb-2 text-sm font-medium text-black dark:text-black">Image Upload:</label>
                 {productCreateErrors['img_url'] && (
                 <p style={{ color: 'red' }}>{productCreateErrors['img_url']}</p>
                 )}
-                <input className={FormStyles} disabled="true" type="multipart-file" value={productCreateInfo.img_url} onChange={(e) => setProductCreateInfo({...productCreateInfo, img_url: e.target.value})} />
+                <input className={FormStyles} disabled={true} type="multipart-file" value={productCreateInfo.img_url} onChange={(e) => setProductCreateInfo({...productCreateInfo, img_url: e.target.value})} />
             </div>
             <button className='className="mt-5 rounded-lg bg-secondary-300 px-20 py-3 transition duration-500 hover:text-white' type="submit">Submit</button>
         </form>
