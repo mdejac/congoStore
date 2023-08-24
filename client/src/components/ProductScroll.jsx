@@ -26,7 +26,7 @@ const ProductScroll = ({searchType}) => {
     }
   
     return (
-    <div className="mt-20 scroll-wrapper bg-secondary-100">
+    <div className="scroll-wrapper bg-secondary-100">
         <h2 className="text-2xl font-semibold mb-4 text-white">{searchType}</h2>
         <div className="scroll-controls">
             <button className="scroll-button prev-button" onClick={() => scrollContainer(searchType, 'left')}>
