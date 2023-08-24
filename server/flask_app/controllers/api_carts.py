@@ -3,7 +3,7 @@ from flask_app.models.cart import Cart
 from flask_app import app
 from flask_cors import CORS
 
-CORS(app, resources={r"/api/carts/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/api/carts/*": {"origins": "http://127.0.0.1:5173"}})
 
 @app.route('/api/carts/add_product', methods=['POST'])
 def add_product_to_cart_api():

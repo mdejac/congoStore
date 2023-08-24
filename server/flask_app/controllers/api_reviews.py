@@ -3,7 +3,7 @@ from flask_app.models.review import Review
 from flask_app import app
 from flask_cors import CORS
 
-CORS(app, supports_credentials=True, resources={r"/api/reviews/*": {"origins": "http://localhost:5173"}})
+CORS(app, supports_credentials=True, resources={r"/api/reviews/*": {"origins": "http://127.0.0.1:5173"}})
 
 @app.route('/api/reviews/<int:product_id>/create', methods=['POST'])
 def create_review_submit_api(product_id):

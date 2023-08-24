@@ -3,7 +3,7 @@ from flask_app.models.product import Product
 from flask_app import app
 from flask_cors import CORS
 
-CORS(app, supports_credentials=True, resources={r"/api/products/*": {"origins": "http://localhost:5173"}})
+CORS(app, supports_credentials=True, resources={r"/api/products/*": {"origins": "http://127.0.0.1:5173"}})
 
 @app.route('/api/products/create', methods=['POST'])
 def create_product_submit_api():
