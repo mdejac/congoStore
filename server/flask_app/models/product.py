@@ -30,7 +30,7 @@ class Product:
                     'description': data['description'],
                     'category': data['category'],
                     'quantity': data['quantity'],
-                    'price' : data['price'],
+                    'price' : float(data['price']),
                     'img_url' : data['img_url']}
             
             query = """INSERT INTO products (user_id, name, description, category, quantity, price, img_url)
@@ -612,7 +612,7 @@ class Product:
                     'description': data['description'],
                     'category': data['category'],
                     'quantity': data['quantity'],
-                    'price' : data['price'],
+                    'price' : float(data['price']),
                     'img_url' : data['img_url']}
             
             query = """INSERT INTO products (user_id, name, description, category, quantity, price, img_url)
