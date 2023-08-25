@@ -33,13 +33,13 @@ const Navbar = () => {
                                 className='text-primary-300'>
                                     Home
                                 </Link>
-                                <Link to="/register"
+                                 <Link to="/products/create"
                                 className='text-primary-300'>
-                                    Register
+                                    Add Product
                                 </Link>
-                                <Link to="/products/create"
+                                <Link to="/users/profile"
                                 className='text-primary-300'>
-                                    Create Product
+                                    Your Products
                                 </Link>
                                 <ShoppingCartIcon/>
                                 <Logout/>
