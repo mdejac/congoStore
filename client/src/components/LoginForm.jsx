@@ -31,8 +31,8 @@ const LoginForm = () => {
       if (response.data.errors) {
         setLoginErrors(response.data.errors);
       } else {
-        setLoginErrors({})
-        setLoginInfo({email:"", password:""})
+        setLoginErrors({});
+        setLoginInfo({email:"", password:""});
         localStorage.setItem("user", JSON.stringify(response.data, null, 2));
         navigate("/products");
       }

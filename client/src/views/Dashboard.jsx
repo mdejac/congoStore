@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import "../App.css";
 
-import ProductScroll from "./ProductScroll";
+import ProductScroll from "../components/ProductScroll";
 
 function Dashboard() {
     const navigate = useNavigate();

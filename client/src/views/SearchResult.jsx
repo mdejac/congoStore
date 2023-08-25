@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 
-const SearchResultView = () => {
+const SearchResult = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState();
     const {searchTerm} = useParams();
@@ -134,4 +134,4 @@ const SearchResultView = () => {
     );
 }
 
-export default SearchResultView
+export default SearchResult
